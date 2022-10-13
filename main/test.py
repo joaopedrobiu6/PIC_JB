@@ -6,6 +6,7 @@ from math import pi
 import numpy as np
 import pandas as pd
 
+
 #FUNÇÕES PARA CRIAR UM TORO E UMA CURVA NO TORO
 def torus(R, a):
     #CÁLCULOS
@@ -21,9 +22,10 @@ def torus(R, a):
     ax.set_xlim3d(-12, 12)
     ax.set_ylim3d(-12, 12)
     ax.set_zlim3d(-12, 12)
-    toroid = ax.plot_surface(x, y, z, alpha=0.1, antialiased=True)
+    toroid = ax.plot_surface(x, y, z, alpha = 0.1, antialiased = True)
     #RETURN
     return x, y, z, toroid
+
 
 def curve(R, a):
     #CÁLCULOS
@@ -32,13 +34,14 @@ def curve(R, a):
     t = np.linspace(0, 2 * pi, 1000)
     theta = eval(func_th)
     phi = eval(func_ph)
-    xc = (R + a*np.cos(theta))*np.cos(phi)
-    yc = (R + a*np.cos(theta))*np.sin(phi)
+    xc = (R + a * np.cos(theta)) * np.cos(phi)
+    yc = (R + a * np.cos(theta)) * np.sin(phi)
     zc = a * np.sin(theta)
     #GRÁFICOS
-    curv = plt.plot(xc, yc, zc, color="orange")
+    curv = plt.plot(xc, yc, zc, color = "orange")
     #RETURN
     return xc, yc, zc, curv
+
 
 #INPUTS
 R = float(input("Raio R: "))
