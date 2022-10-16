@@ -9,10 +9,6 @@ from scipy.signal import square
 from scipy.integrate import quad
 from math import *
 
-from sympy import fourier_transform
-from sympy import fourier_series
-from sympy.abc import x
-
 
 def fourier_coefs_theta(n):
     fp = lambda x: (4 * x**2 + 3) * np.cos(i * x)
