@@ -13,6 +13,7 @@ from sympy import fourier_transform
 from sympy import fourier_series
 from sympy.abc import x
 
+
 def fourier_coefs_theta(n):
     fp = lambda x: (4 * x**2 + 3) * np.cos(i * x)
     fi = lambda x: (4 * x**2 + 3) * np.sin(i * x)
@@ -29,6 +30,7 @@ def fourier_coefs_theta(n):
             bn = 0
         Bn.append(bn)
     return An, Bn
+
 
 def fourier_coefs_phi(n):
     fp = lambda x: (x) * np.cos(i * x)
@@ -47,8 +49,9 @@ def fourier_coefs_phi(n):
         Bn.append(bn)
     return An, Bn
 
+
 #FUNÇÕES PARA CRIAR UM TORO E UMA CURVA NO TORO
-def torus(R, a):
+def torus(R, a, lim):
     #CÁLCULOS
     theta = np.linspace(0, 2 * pi, 1000)
     phi = np.linspace(0, 2 * pi, 1000)
@@ -59,12 +62,14 @@ def torus(R, a):
     #GRÁFICOS
     ax = plt.figure()
     ax = plt.axes(projection='3d')
-    ax.set_xlim3d(-12, 12)
-    ax.set_ylim3d(-12, 12)
-    ax.set_zlim3d(-12, 12)
+    ax.set_xlim3d(-lim, lim)
+    ax.set_ylim3d(-lim, lim)
+    ax.set_zlim3d(-lim, lim)
     toroid = ax.plot_surface(x, y, z, alpha=0.1, antialiased=True)
     #RETURN
     return x, y, z, toroid
+
+
 def curve(R, a, n):
     #CÁLCULOS
     func_th = input("Rarametrização de Theta: ")
@@ -114,12 +119,14 @@ def curve(R, a, n):
 
 
 #INPUTS
-
+print(
+    "Okay então, o limite dos eixos é int, os Raios (R, a) são floats.\nOs coeficientes de t nas parametrizações têm de ser inteiros para a curva ser fechada!\n")
+lim = int(input("Limite dos eixos (abs): "))
 R = float(input("Raio R: "))
 a = float(input("Raio a: "))
 n = int(input("n: "))
 
-x, y, z, toroid = torus(R, a)
+x, y, z, toroid = torus(R, a, lim)
 xc, yc, zc, curv = curve(R, a, n)
 
 plt.show()
