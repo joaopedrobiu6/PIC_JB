@@ -68,7 +68,7 @@ std::vector<double> MonteCarlo(int N, int iter, double step, std::function<doubl
         }
         Integral = (area * (double)(sum / N) - area * (double)(negsum / N));
         Error = (area / N) * sqrt((sum - negsum) * (1 - ((sum - negsum) / N)));
-        std::cout << std::setprecision(7) << "(" << Integral << ", " << Error << ")" << std::endl;
+        // std::cout << std::setprecision(7) << "(" << Integral << ", " << Error << ")" << std::endl;
 
         sum = 0;
         negsum = 0;
@@ -96,20 +96,20 @@ void FourierCoefficients(std::function<double(double, int)> par, std::function<d
     auto An = MonteCarlo(N, iter, step, par);
 
     int k = M_PI;
-    
+
+    std::cout << par(k, 0) << "\t" << par(-k, 0) << std::endl;
     if (par(k, 0) == par(-k, 0))
     {
         for (int i = 0; i < Bn.size(); i++)
         {
-            std::cout << An[i] << std::endl;
-            An[i] = 0;
+            Bn[i] = 0;
         }
     }
 
-    if (par(k, 0) == par(-k, 0))
+    if (par(k, 0) == -par(-k, 0))
     {
         for (int i = 0; i < Bn.size(); i++)
-            Bn[i] = 0;
+            An[i] = 0;
     }
 
     Write(An, Bn, filename);
