@@ -129,11 +129,17 @@ int main()
     std::function<double(double, int)> th_sin = [](double x, int i)
     { return ((x * x) * sin((i / 2) * x)) / (2 * M_PI); };
 
+    /*     std::function<double(double, int)> ph_cos = [](double x, int i)
+        { return (x * cos((i / 2) * x)) / (2 * M_PI); };
+
+        std::function<double(double, int)> ph_sin = [](double x, int i)
+        { return (x * sin((i / 2) * x)) / (2 * M_PI); }; */
+
     std::function<double(double, int)> ph_cos = [](double x, int i)
-    { return (x * cos((i / 2) * x)) / (2 * M_PI); };
+    { return 0; };
 
     std::function<double(double, int)> ph_sin = [](double x, int i)
-    { return (x * sin((i / 2) * x)) / (2 * M_PI); };
+    { return 0; };
 
     std::cout << "N: ";
     std::cin >> N;
