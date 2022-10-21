@@ -88,6 +88,9 @@ void Write(std::vector<double> a, std::vector<double> b, std::string name)
 
     for (int i = 0; i < vec.size(); i++)
         File << vec[i].first << ";" << vec[i].second << std::endl;
+
+    std::cout << "\nData saved as " << name << "\n"
+              << std::endl;
 };
 
 void FourierCoefficients(std::function<double(double, int)> par, std::function<double(double, int)> impar, int N, int iter, double step, std::string filename)
@@ -97,7 +100,6 @@ void FourierCoefficients(std::function<double(double, int)> par, std::function<d
 
     int k = M_PI;
 
-    std::cout << par(k, 0) << "\t" << par(-k, 0) << std::endl;
     if (par(k, 0) == par(-k, 0))
     {
         for (int i = 0; i < Bn.size(); i++)
@@ -117,6 +119,10 @@ void FourierCoefficients(std::function<double(double, int)> par, std::function<d
 
 int main()
 {
+    int N;
+    int iter;
+    double step;
+
     std::function<double(double, int)> th_cos = [](double x, int i)
     { return ((x * x) * cos((i * x) / 2)) / (2 * M_PI); };
 
@@ -124,11 +130,23 @@ int main()
     { return ((x * x) * sin((i / 2) * x)) / (2 * M_PI); };
 
     std::function<double(double, int)> ph_cos = [](double x, int i)
-    { return (x * cos((i / 2)) * x) / (2 * M_PI); };
+    { return (x * cos((i / 2) * x)) / (2 * M_PI); };
+
     std::function<double(double, int)> ph_sin = [](double x, int i)
     { return (x * sin((i / 2) * x)) / (2 * M_PI); };
 
-    FourierCoefficients(th_cos, th_sin, 1000000, 10, 1E-3, "theta_param.txt");
+    std::cout << "N: ";
+    std::cin >> N;
+    std::cout << "Number of Iterations: ";
+    std::cin >> iter;
+    std::cout << "Step: ";
+    std::cin >> step;
+
+    FourierCoefficients(ph_cos, th_sin, N, iter, step, "phidata.csv");
+    FourierCoefficients(th_cos, th_sin, N, iter, step, "thetadata.csv");
+
+    std::cout << "'montecarlo.exe' executed with sucess\n"
+              << std::endl;
 
     return 0;
 }

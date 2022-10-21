@@ -8,6 +8,24 @@ import pandas as pd
 from scipy.signal import square
 from scipy.integrate import quad
 from math import *
+import os
+
+makepath = "/home/joaobiu/PIC/"
+os.chdir(makepath)
+os.system("make")
+
+path = "/home/joaobiu/PIC/bin"
+os.chdir(path)
+os.system("./montecarlo.exe")
+
+dataframe_theta = pd.read_csv("thetadata.csv",
+                              index_col=False,
+                              header=None,
+                              sep=";")
+dataframe_phi = pd.read_csv("phidata.csv",
+                            index_col=False,
+                            header=None,
+                            sep=";")
 
 
 def fourier_coefs_theta(n):
@@ -66,7 +84,7 @@ def torus(R, a, lim):
     return x, y, z, toroid
 
 
-def curve(R, a, n):
+def curve(R, a, n, dataframe_theta, dataframe_phi):
     #CÁLCULOS
     func_th = input("Rarametrização de Theta: ")
     func_ph = input("Parametrização de Phi: ")
@@ -78,8 +96,13 @@ def curve(R, a, n):
     theta = np.asarray(theta)
     phi = np.asarray(phi)
 
+    A1 = np.asarray(dataframe_theta.iloc[0:, 0])
+    B1 = np.asarray(dataframe_theta.iloc[0:, 1])
+
+    n = np.size(A1)
+    print(n)
     #SERIE DE FOURIER PARA THETA
-    A1, B1 = fourier_coefs_theta(n)
+    #A1, B1 = fourier_coefs_theta(n)
     C1 = []
     for i in range(n):
         aux = (A1[i] * np.cos(i * t) + B1[i] * np.sin(i * t))
@@ -92,7 +115,11 @@ def curve(R, a, n):
     theta = theta + C21
 
     #SERIE DE FOURIER PARA PHI
-    A2, B2 = fourier_coefs_phi(n)
+    #A2, B2 = fourier_coefs_phi(n)
+
+    A2 = np.asarray(dataframe_phi.iloc[0:, 0])
+    B2 = np.asarray(dataframe_phi.iloc[0:, 1])
+
     C2 = []
     for i in range(n):
         aux = (A2[i] * np.cos(i * t) + B2[i] * np.sin(i * t))
@@ -115,15 +142,15 @@ def curve(R, a, n):
 
 
 #INPUTS
-print(
-    "Okay então, o limite dos eixos é int, os Raios (R, a) são floats.\nOs coeficientes de t nas parametrizações têm de ser inteiros para a curva ser fechada!\n"
-)
 lim = int(input("Limite dos eixos (abs): "))
 R = float(input("Raio R: "))
 a = float(input("Raio a: "))
 n = int(input("n: "))
 
 x, y, z, toroid = torus(R, a, lim)
-xc, yc, zc, curv = curve(R, a, n)
+xc, yc, zc, curv = curve(R, a, n, dataframe_theta, dataframe_phi)
+
+#a1 = np.asarray(dataframe.iloc[0:, 0])
+#print(a1)
 
 plt.show()
