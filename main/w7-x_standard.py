@@ -1,19 +1,16 @@
+#!/usr/bin/env python
+
 import os
 from pathlib import Path
+
 import numpy as np
 from scipy.optimize import minimize
-
-from simsopt.geo import SurfaceRZFourier, create_equally_spaced_curves, \
-    CurveLength, curves_to_vtk
-from simsopt.field import coils_via_symmetries
-from simsopt.objectives import SquaredFlux, QuadraticPenalty
-
-from simsopt.objectives import Weight
-from simsopt.field import Current, Coil, BiotSavart
-from simsopt.geo import CurveXYZFourier, plot
-from simsopt.field import BiotSavart
-from simsopt.geo import CurveLength, CurveCurveDistance, \
-    MeanSquaredCurvature, LpCurveCurvature, CurveSurfaceDistance
+from simsopt.field import BiotSavart, Coil, Current, coils_via_symmetries
+from simsopt.geo import (CurveCurveDistance, CurveLength, CurveSurfaceDistance,
+                         CurveXYZFourier, LpCurveCurvature,
+                         MeanSquaredCurvature, SurfaceRZFourier,
+                         create_equally_spaced_curves, curves_to_vtk, plot)
+from simsopt.objectives import QuadraticPenalty, SquaredFlux, Weight
 
 ##################################################################################################
 ######################################## INPUT PARAMETERS ########################################
