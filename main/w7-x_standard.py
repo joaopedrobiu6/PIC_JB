@@ -32,6 +32,7 @@ MSC_THRESHOLD = 5
 MSC_WEIGHT = 1e-6
 # Input file from VMEC (wout.nc)
 filename = "/home/joaobiu/PIC/vmec_equilibria/W7-X/Standard/wout.nc"
+#filename = "/home/joaobiu/simsopt/tests/test_files/wout_ITERModel_reference.nc"
 # Directory for output
 OUT_DIR = "./output/"
 os.makedirs(OUT_DIR, exist_ok=True)
@@ -58,7 +59,7 @@ R1 = 1.5
 order = 5
 
 # Criar curvas e correntes iniciais
-base_curves = create_equally_spaced_curves(ncoils, s.nfp, stellsym=True, R0=R0, R1=R1, order=order)
+base_curves = create_equally_spaced_curves(ncoils, s.nfp, stellsym=True, R0=R0, R1=R1, order=order, numquadpoints=128)
 base_currents = [Current(1.0) * 1e5 for i in range(ncoils)]
 # Since the target field is zero, one possible solution is just to set all
 # currents to 0. To avoid the minimizer finding that solution, we fix one
@@ -119,11 +120,12 @@ curves_to_vtk(curves, OUT_DIR + f"curves_opt_short")
 pointData = {"B_N": np.sum(bs.B().reshape((nphi, ntheta, 3)) * s.unitnormal(), axis=2)[:, :, None]}
 s.to_vtk(OUT_DIR + "surf_opt_short", extra_data=pointData)
 
-#dofs = res.x
-#LENGTH_WEIGHT *= 0.1
-#res = minimize(fun, dofs, jac=True, method='L-BFGS-B', options={'maxiter': MAXITER, 'maxcor': 300}, tol=1e-15)
-#curves_to_vtk(curves, OUT_DIR + f"curves_opt_long")
-#pointData = {"B_N": np.sum(bs.B().reshape((nphi, ntheta, 3)) * s.unitnormal(), axis=2)[:, :, None]}
-#s.to_vtk(OUT_DIR + "surf_opt_long", extra_data=pointData)
-
+""" 
+dofs = res.x
+LENGTH_WEIGHT *= 0.1
+res = minimize(fun, dofs, jac=True, method='L-BFGS-B', options={'maxiter': MAXITER, 'maxcor': 300}, tol=1e-15)
+curves_to_vtk(curves, OUT_DIR + f"curves_opt_long")
+pointData = {"B_N": np.sum(bs.B().reshape((nphi, ntheta, 3)) * s.unitnormal(), axis=2)[:, :, None]}
+s.to_vtk(OUT_DIR + "surf_opt_long", extra_data=pointData)
+"""
 #plot(curves + [s], engine="mayavi")

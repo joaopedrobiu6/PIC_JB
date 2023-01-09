@@ -1,0 +1,11 @@
+ficheiros importantes:
+
+curvas cpp: /home/joaobiu/simsopt/src/simsoptpp
+curvas py: /home/joaobiu/simsopt/src/simsopt/geo
+
+Planificação:
+
+queremos obter uma forma de criar curvas e depois otimizá-las, sendo estas parametrizáveis a uma superfície.
+Objetivos:
+1) Criar um algoritmo para o fazer sem criar nada novo no codigo (simsopt)
+2) Criar uma nova classe deste tipo de curvas
