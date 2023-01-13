@@ -1,4 +1,20 @@
 from simsopt.geo import CurveCWS
+from simsopt.geo import SurfaceRZFourier
 
-cws = CurveCWS(1, 1, [1, 2, 1, 2, 1, 2], 20, 1, 2, True)
-#curve = cws.num_dofs()
+filename = "/home/joaobiu/PIC/vmec_equilibria/W7-X/Standard/wout.nc"
+
+s = SurfaceRZFourier.from_wout(
+    filename, range="full torus", ntheta=32, nphi=32
+)  # range = 'full torus', 'field period', 'half period'
+sdofs = s.get_dofs()
+print(sdofs)
+
+cws = CurveCWS(s.mpol, s.ntor, sdofs, 50, 0, s.nfp, s.stellsym)
+
+cws.set_dofs([1, 0, 0, 0])
+
+
+print(cws.get_dofs())
+
+# s.plot(alpha=0.1)
+# cws.plot()
