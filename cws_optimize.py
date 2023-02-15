@@ -82,9 +82,7 @@ MAXITER = 50 if ci else 400
 # File for the desired boundary magnetic surface:
 TEST_DIR = "/home/joaobiu/simsopt_curvecws/tests/test_files"
 filename = "/home/joaobiu/simsopt_curvecws/tests/test_files/input.LandremanPaul2021_QA"
-filename_cws = (
-    "/home/joaobiu/simsopt_curvecws/tests/test_files/wout_circular_tokamak_reference.nc"
-)
+filename_cws = ("/home/joaobiu/simsopt_curvecws/tests/test_files/wout_circular_tokamak_reference.nc")
 
 
 # Directory for output
@@ -98,12 +96,8 @@ os.makedirs(OUT_DIR, exist_ok=True)
 # Initialize the boundary magnetic surface:
 nphi = 32
 ntheta = 32
-s = SurfaceRZFourier.from_vmec_input(
-    filename, range="half period", nphi=nphi, ntheta=ntheta
-)
-cws = SurfaceRZFourier.from_wout(
-    filename_cws, range="half period", ntheta=ntheta, nphi=nphi
-)
+s = SurfaceRZFourier.from_vmec_input(filename, range="half period", nphi=nphi, ntheta=ntheta)
+cws = SurfaceRZFourier.from_wout(filename_cws, range="half period", ntheta=ntheta, nphi=nphi)
 
 # Create the initial coils:
 # base_curves = create_equally_spaced_curves(ncoils, s.nfp, stellsym=True, R0=R0, R1=R1, order=order)
