@@ -43,7 +43,7 @@ from simsopt.geo import (
 
 # Number of unique coil shapes, i.e. the number of coils per half field period:
 # (Since the configuration has nfp = 2, multiply by 4 to get the total number of coils.)
-ncoils = 18
+ncoils = 2
 
 # Major radius for the initial circular coils:
 R0 = 1.0
@@ -111,7 +111,7 @@ for i in range(ncoils):
         mpol=cws.mpol,
         ntor=cws.ntor,
         idofs=cws.x,
-        numquadpoints=250,
+        numquadpoints=10,
         order=1,
         nfp=cws.nfp,
         stellsym=cws.stellsym,

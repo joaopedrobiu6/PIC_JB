@@ -49,7 +49,7 @@ nphi = 32
 s = SurfaceRZFourier.from_wout(filename, range="half period", ntheta=ntheta, nphi=nphi)  #range = 'full torus', 'field period', 'half period'
 
 # Number of unique coil shapes:
-ncoils = 4
+ncoils = 2
 # Major radius for the initial circular coils:
 R0 = s.get_rc(0, 0)  #get_rc(0,0) dá nos o raio grande da superfície
 # Minor radius for the initial circular coils:
@@ -119,6 +119,7 @@ res = minimize(fun, dofs, jac=True, method='L-BFGS-B', options={'maxiter': MAXIT
 curves_to_vtk(curves, OUT_DIR + f"curves_opt_short")
 pointData = {"B_N": np.sum(bs.B().reshape((nphi, ntheta, 3)) * s.unitnormal(), axis=2)[:, :, None]}
 s.to_vtk(OUT_DIR + "surf_opt_short", extra_data=pointData)
+
 
 """ 
 dofs = res.x
