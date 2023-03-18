@@ -38,7 +38,7 @@ from simsopt.geo import (
     MeanSquaredCurvature,
     LpCurveCurvature,
     CurveSurfaceDistance,
-    CurveCWS,
+    CurveCWSFourier,CurveRZFourier
 )
 
 # Number of unique coil shapes, i.e. the number of coils per half field period:
@@ -105,9 +105,10 @@ phi_array = np.linspace(0, 2 * np.pi, ncoils)
 
 base_curves = []
 
+
 for i in range(ncoils):
 
-    curve_cws = CurveCWS(
+    curve_cws = CurveCWSFourier(
         mpol=cws.mpol,
         ntor=cws.ntor,
         idofs=cws.x,
@@ -129,6 +130,7 @@ coils = []
 
 for i in range(ncoils):
     coils.append(Coil(base_curves[i], base_currents[i]))
+
 
 
 # coils = coils_via_symmetries(base_curves, base_currents, s.nfp, True)
@@ -206,6 +208,7 @@ for eps in [1e-3, 1e-4, 1e-5, 1e-6, 1e-7]:
     J1, _ = f(dofs + eps * h)
     J2, _ = f(dofs - eps * h)
     print("err", (J1 - J2) / (2 * eps) - dJh)
+
 
 print(
     """
