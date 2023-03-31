@@ -6,9 +6,6 @@ circular_tokamak = "/home/joaobiu/simsopt_curvecws/tests/test_files/wout_circula
 w7x = "/home/joaobiu/simsopt_curvecws/tests/test_files/wout_W7-X_without_coil_ripple_beta0p05_d23p4_tm_reference.nc"
 filename = "/home/joaobiu/simsopt_curvecws/tests/test_files/wout_n3are_R7.75B5.7.nc"
 
-def rep(data):
-    return data
-
 #s = SurfaceRZFourier.from_nphi_ntheta(32, 32, "full torus", 1)
 s = SurfaceRZFourier.from_wout(w7x, range="full torus", ntheta=64, nphi=64)
 
@@ -37,10 +34,3 @@ def plot_deriv():
     ax.quiver(x, y, z, 0.1 * xt, 0.1 * yt, 0.1 * zt, arrow_length_ratio=0.1, color="r")
 
     c.plot(plot_derivative=True)
-
-def test_dgamma_by_dcoeff():
-    auto = c.dgamma_by_dcoeff()
-    print(auto.shape)
-    print(auto)
-
-test_dgamma_by_dcoeff()

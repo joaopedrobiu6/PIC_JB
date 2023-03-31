@@ -131,8 +131,6 @@ coils = []
 for i in range(ncoils):
     coils.append(Coil(base_curves[i], base_currents[i]))
 
-
-
 # coils = coils_via_symmetries(base_curves, base_currents, s.nfp, True)
 bs = BiotSavart(coils)
 bs.set_points(s.gamma().reshape((-1, 3)))
