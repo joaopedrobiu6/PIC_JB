@@ -1,3 +1,0 @@
-sudo -H pip uninstall simsopt
-sudo rm -rf build/
-sudo -H python3 setup.py install
