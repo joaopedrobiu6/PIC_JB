@@ -10,17 +10,17 @@ w7x = "/home/joaobiu/simsopt_curvecws/tests/test_files/wout_W7-X_without_coil_ri
 filename = "/home/joaobiu/simsopt_curvecws/tests/test_files/wout_n3are_R7.75B5.7.nc"
 
 # CREATE SURFACES
-s = SurfaceRZFourier.from_wout(circular_tokamak, range="half period", ntheta=64, nphi=64)
+s = SurfaceRZFourier.from_wout(w7x, range="half period", ntheta=64, nphi=64)
 surf = SurfaceRZFourier.from_nphi_ntheta(255, 256, "half period", 1)
 
 R = s.get_rc(0, 0)
 surf.set_dofs([R, 4, 4])
 
 # CREATE A CURVE ON A CWS
-c = CurveCWSFourier(surf.mpol, surf.ntor, surf.x, 300, 1, surf.nfp, surf.stellsym)
+c = CurveCWSFourier(surf.mpol, surf.ntor, surf.x, 100, 1, surf.nfp, surf.stellsym)
 c.set_dofs([1, 0, 0, 0, 0, 0, 0, 0])
 
-c_xyz = CurveXYZFourier(300, 10)
+c_xyz = CurveXYZFourier(100, 10)
 c_xyz.set("xc(0)", R)
 c_xyz.set("xc(1)", 4)
 c_xyz.set("yc(0)", 0)

@@ -14,7 +14,7 @@ R = s.get_rc(0, 0)
 s.set_dofs([R, 1, 1])
 
 # CWS CURVE
-c_cws = CurveCWSFourier(s.mpol, s.ntor, s.x, 15, 0, s.nfp, s.stellsym)
+c_cws = CurveCWSFourier(s.mpol, s.ntor, s.x, 150, 0, s.nfp, s.stellsym)
 c_cws.set_dofs([1, 0, 0, 0]) # [th_l, th_c0, phi_l, phi_c0]
 
 ###################################################
@@ -23,7 +23,7 @@ c_cws.set_dofs([1, 0, 0, 0]) # [th_l, th_c0, phi_l, phi_c0]
 ###################################################
 ###################################################
 
-c_xyz = CurveXYZFourier(15, 10)
+c_xyz = CurveXYZFourier(150, 10)
 c_xyz.set("xc(0)", R)
 c_xyz.set("xc(1)", 1)
 c_xyz.set("yc(0)", 0)
