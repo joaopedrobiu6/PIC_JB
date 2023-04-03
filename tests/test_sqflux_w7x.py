@@ -10,7 +10,7 @@ w7x = "/home/joaobiu/simsopt_curvecws/tests/test_files/wout_W7-X_without_coil_ri
 filename = "/home/joaobiu/simsopt_curvecws/tests/test_files/wout_n3are_R7.75B5.7.nc"
 
 # CREATE SURFACES
-s = SurfaceRZFourier.from_wout(w7x, range="half period", ntheta=64, nphi=64)
+s = SurfaceRZFourier.from_wout(w7x, range="full torus", ntheta=256, nphi=256)
 surf = SurfaceRZFourier.from_nphi_ntheta(255, 256, "half period", 1)
 
 R = s.get_rc(0, 0)
@@ -57,9 +57,8 @@ print("Squared Flux:")
 print("With CurveXYZFourier: ", Jf_xyz.J())
 print("With CurveCWSFourier: ", Jf_cws.J())
 
-
-
 #PLOT
+
 fig = plt.figure()
 ax = fig.add_subplot(projection='3d')
 surf.plot(ax = ax, show=False, alpha=0.2)
@@ -69,10 +68,10 @@ s.plot(ax=ax,show=False, alpha=0.2)
 #c.plot()
 c_xyz.plot(ax=ax, alpha=1)
 
-""" 
-s.plot("plotly", show=True, close=True)
+''' 
+s.plot("mayavi", ax=ax, show=False, close=True)
 c.plot("mayavi", ax=ax, show=False, close=True)
 c_xyz.plot("mayavi", ax=ax, show=True, close=True)
-"""
+'''
 
 plt.show()
