@@ -43,6 +43,7 @@ squaredflux_xyz = Jf_cws.J()
 Bcoil_cws = bs_cws.B()
 Bcoil_xyz = bs_xyz.B()
 
+'''
 print("Bcoil_cws: \n", Bcoil_cws)
 print("Bcoil_cws shape: ", Bcoil_cws.shape)
 print("####################################################################")
@@ -50,18 +51,28 @@ print("Bcoil_xyz: \n", Bcoil_xyz)
 print("Bcoil_cws shape: ", Bcoil_cws.shape)
 print("####################################################################")
 print("Bcoil difference: \n", Bcoil_cws - Bcoil_xyz)
+'''
+
+print("Squared Flux:")
+print("With CurveXYZFourier: ", Jf_xyz.J())
+print("With CurveCWSFourier: ", Jf_cws.J())
 
 
 
 #PLOT
 fig = plt.figure()
 ax = fig.add_subplot(projection='3d')
-surf.plot(ax = ax, show=False, alpha=0.2)
-s.plot(ax=ax, show=False, alpha=1)
+#surf.plot(ax = ax, show=False, alpha=0.2)
+s.plot(ax=ax,show=False, alpha=0.2)
 
-c.plot(ax=ax, show=False)
-c_xyz.plot(ax=ax)
-#coils_cws[0].plot(ax=ax)
-#coils_xyz[0].plot(ax=ax)
+#c.plot(ax=ax, show=False)
+#c.plot()
+c_xyz.plot(ax=ax, alpha=1)
+
+""" 
+s.plot("mayavi", show=False, close=True)
+c.plot("mayavi", ax=ax, show=False, close=True)
+c_xyz.plot("mayavi", ax=ax, show=True, close=True)
+"""
 
 plt.show()
