@@ -1,3 +1,12 @@
+'''
+Compares the SquaredFlux() of a coil made with CurveCWSFourier and a coil made with CurveXYZFourier and its dependance
+in the number of quadpoints
+
+Both Curves have the same dimensions and positions.
+
+The surface used is W7X's and the CWS is a circular torus
+'''
+
 from simsopt.geo import CurveCWSFourier, SurfaceRZFourier, CurveLength, CurveXYZFourier
 from simsopt.objectives import SquaredFlux
 from simsopt.field import BiotSavart

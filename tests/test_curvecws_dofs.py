@@ -1,3 +1,11 @@
+'''
+Compares gamma(), gammadash(), gammadashdash() and gammadashdash() of a CurveCWSFourier and a CurveXYZFourier
+
+Both Curves have the same dimensions and positions.
+
+'''
+
+
 import matplotlib.pyplot as plt
 import numpy as np
 from simsopt.geo import CurveCWSFourier, SurfaceRZFourier, CurveXYZFourier

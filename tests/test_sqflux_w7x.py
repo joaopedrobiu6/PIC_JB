@@ -1,3 +1,10 @@
+'''
+Compares the SquaredFlux() of a coil made with CurveCWSFourier and a coil made with CurveXYZFourier
+Both Curves have the same dimensions and positions.
+
+The surface used is W7X's and the CWS is a circular torus
+'''
+
 from simsopt.geo import CurveCWSFourier, SurfaceRZFourier, CurveLength, CurveXYZFourier
 from simsopt.objectives import SquaredFlux
 from simsopt.field import BiotSavart
@@ -5,13 +12,11 @@ from simsopt.field import Current, Coil
 import matplotlib.pyplot as plt
 
 # SURFACE INPUT FILES FOR TESTING
-circular_tokamak = "/home/joaobiu/simsopt_curvecws/tests/test_files/wout_circular_tokamak_reference.nc"
 w7x = "/home/joaobiu/simsopt_curvecws/tests/test_files/wout_W7-X_without_coil_ripple_beta0p05_d23p4_tm_reference.nc"
-filename = "/home/joaobiu/simsopt_curvecws/tests/test_files/wout_n3are_R7.75B5.7.nc"
 
 # CREATE SURFACES
 s = SurfaceRZFourier.from_wout(w7x, range="full torus", ntheta=256, nphi=256)
-surf = SurfaceRZFourier.from_nphi_ntheta(255, 256, "half period", 1)
+surf = SurfaceRZFourier.from_nphi_ntheta(255, 256, "full torus", 1)
 
 R = s.get_rc(0, 0)
 surf.set_dofs([R, 4, 4])
