@@ -42,11 +42,24 @@ c_xyz.set("zs(1)", 1)
 gamma_diff = c_xyz.gamma() - c_cws.gamma()
 gammadash_diff = c_xyz.gammadash() - c_cws.gammadash()
 gammadashdash_diff = c_xyz.gammadashdash() - c_cws.gammadashdash()
+gammadashdashdash_diff = c_xyz.gammadashdashdash() - c_cws.gammadashdashdash()
+
 #dgamma_by_dcoeff_diff = c_xyz.dgamma_by_dcoeff() - c_cws.dgamma_by_dcoeff()
 
 print(gamma_diff)
+print("******************************************************************************************")
 print(gammadash_diff)
+print("******************************************************************************************")
 print(gammadashdash_diff)
+print("******************************************************************************************")
+print(gammadashdashdash_diff)
+print("******************************************************************************************")
+print(sum(gamma_diff))
+print(sum(gammadash_diff))
+print(sum(gammadashdash_diff))
+print(sum(gammadashdashdash_diff))
+
+
 #print(sum(abs(dgamma_by_dcoeff_diff)))
 
 # PLOTS

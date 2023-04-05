@@ -27,7 +27,7 @@ surf.set_dofs([R, 4, 4])
 c = CurveCWSFourier(surf.mpol, surf.ntor, surf.x, 300, 1, surf.nfp, surf.stellsym)
 c.set_dofs([1, 0, 0, 0, 0, 0, 0, 0])
 
-c_xyz = CurveXYZFourier(300, 10)
+c_xyz = CurveXYZFourier(300, 1)
 c_xyz.set("xc(0)", R)
 c_xyz.set("xc(1)", 4)
 c_xyz.set("yc(0)", 0)
@@ -63,6 +63,9 @@ print("Bcoil difference: \n", Bcoil_cws - Bcoil_xyz)
 print("Squared Flux:")
 print("With CurveXYZFourier: ", Jf_xyz.J())
 print("With CurveCWSFourier: ", Jf_cws.J())
+print("dJ:")
+print("With CurveXYZFourier: ", Jf_xyz.dJ().shape)
+print("With CurveCWSFourier: ", Jf_cws.dJ().shape)
 
 
 
