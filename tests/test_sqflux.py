@@ -11,6 +11,7 @@ from simsopt.field import BiotSavart
 from simsopt.field import Current, Coil
 import matplotlib.pyplot as plt
 
+
 # SURFACE INPUT FILES FOR TESTING
 circular_tokamak = "/home/joaobiu/simsopt_curvecws/tests/test_files/wout_circular_tokamak_reference.nc"
 w7x = "/home/joaobiu/simsopt_curvecws/tests/test_files/wout_W7-X_without_coil_ripple_beta0p05_d23p4_tm_reference.nc"
@@ -79,10 +80,9 @@ s.plot(ax=ax,show=False, alpha=0.2)
 #c.plot()
 c_xyz.plot(ax=ax, alpha=1)
 
-""" 
-s.plot("plotly", show=True, close=True)
+
+s.plot("mayavi", ax =ax, show=False, close=True)
 c.plot("mayavi", ax=ax, show=False, close=True)
 c_xyz.plot("mayavi", ax=ax, show=True, close=True)
-"""
 
 plt.show()

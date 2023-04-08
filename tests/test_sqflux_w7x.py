@@ -15,11 +15,12 @@ import matplotlib.pyplot as plt
 w7x = "/home/joaobiu/simsopt_curvecws/tests/test_files/wout_W7-X_without_coil_ripple_beta0p05_d23p4_tm_reference.nc"
 
 # CREATE SURFACES
-s = SurfaceRZFourier.from_wout(w7x, range="full torus", ntheta=256, nphi=256)
+s = SurfaceRZFourier.from_wout(w7x, range= "full torus", ntheta=256, nphi=256)
 surf = SurfaceRZFourier.from_nphi_ntheta(255, 256, "full torus", 1)
 
 R = s.get_rc(0, 0)
-surf.set_dofs([R, 4, 4])
+surf.set_dofs([R, 3, 3])
+surf.x
 
 # CREATE A CURVE ON A CWS
 c = CurveCWSFourier(surf.mpol, surf.ntor, surf.x, 100, 1, surf.nfp, surf.stellsym)
@@ -27,10 +28,10 @@ c.set_dofs([1, 0, 0, 0, 0, 0, 0, 0])
 
 c_xyz = CurveXYZFourier(100, 10)
 c_xyz.set("xc(0)", R)
-c_xyz.set("xc(1)", 4)
+c_xyz.set("xc(1)", 3)
 c_xyz.set("yc(0)", 0)
 c_xyz.set("yc(1)", 0)
-c_xyz.set("zs(1)", 4)
+c_xyz.set("zs(1)", 3)
 
 
 current = Current(1E5)
@@ -64,19 +65,18 @@ print("With CurveCWSFourier: ", Jf_cws.J())
 
 #PLOT
 
-fig = plt.figure()
-ax = fig.add_subplot(projection='3d')
-surf.plot(ax = ax, show=False, alpha=0.2)
-s.plot(ax=ax,show=False, alpha=0.2)
+#fig = plt.figure()
+#ax = fig.add_subplot(projection='3d')
+#surf.plot(ax = ax, show=False, alpha=0.2)
+#s.plot(ax=ax,show=False, alpha=0.2)
 
 #c.plot(ax=ax, show=False)
 #c.plot()
-c_xyz.plot(ax=ax, alpha=1)
+#c_xyz.plot(ax=ax, alpha=1)
 
-''' 
-s.plot("mayavi", ax=ax, show=False, close=True)
-c.plot("mayavi", ax=ax, show=False, close=True)
-c_xyz.plot("mayavi", ax=ax, show=True, close=True)
-'''
 
-plt.show()
+#s.plot("mayavi", ax=ax, show=False, close=True)
+#c.plot("mayavi", ax=ax, show=True, close=True)
+#c_xyz.plot("mayavi", ax=ax, show=False, close=True)
+
+#plt.show()
