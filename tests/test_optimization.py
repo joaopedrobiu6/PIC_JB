@@ -32,7 +32,7 @@ CS_WEIGHT = 10
 
 # Threshold and weight for the curvature penalty in the objective function:
 CURVATURE_THRESHOLD = 5.
-CURVATURE_WEIGHT = 1e-6
+CURVATURE_WEIGHT = 1e-2
 
 # Threshold and weight for the mean squared curvature penalty in the objective function:
 MSC_THRESHOLD = 5
@@ -45,12 +45,12 @@ filename = "/home/joaobiu/simsopt_curvecws/tests/test_files/wout_n3are_R7.75B5.7
 
 # CREATE SURFACES
 s = SurfaceRZFourier.from_wout(
-    w7x, range="half period", ntheta=64, nphi=64
+    w7x, range="half period", ntheta=256, nphi=256
 )
 cws = SurfaceRZFourier.from_nphi_ntheta(255, 256, "half period", 1)
 
 R = s.get_rc(0, 0)
-cws.set_dofs([R, 4, 4])
+cws.set_dofs([R, 2, 2])
 
 # CREATE A CURVE ON A CWS
 # c_cws = CurveCWSFourier(cws.mpol, cws.ntor, cws.x, 300, 1, cws.nfp, cws.stellsym)
@@ -70,13 +70,15 @@ for i in range(ncoils - 1):
         mpol=cws.mpol,
         ntor=cws.ntor,
         idofs=cws.x,
-        numquadpoints=250,
+        numquadpoints=400,
         order=1,
         nfp=cws.nfp,
         stellsym=cws.stellsym,
     )
-    curve_cws.set_dofs([1, 0, 0, 0, 0, phi_array[i], 0, 0])
+    curve_cws.set_dofs([1, 0, 0, 0, 0, phi_array[i], 0, 0]) 
     base_curves.append(curve_cws)
+    
+
 
 base_currents = [Current(1e5) for i in range(ncoils)]
 base_currents[0].fix_all()
@@ -86,6 +88,17 @@ coils = []
 for i in range(ncoils - 1):
     coils.append(Coil(base_curves[i], base_currents[i]))
 
+coils[0].curve.fix(0)
+coils[0].curve.fix(4)
+
+coils[1].curve.fix(0)
+coils[1].curve.fix(4)
+
+coils[2].curve.fix(0)
+coils[2].curve.fix(4)
+
+print(coils[1].dofs_free_status)
+
 bs = BiotSavart(coils)
 bs.set_points(s.gamma().reshape((-1, 3)))
 
@@ -93,7 +106,7 @@ bs.set_points(s.gamma().reshape((-1, 3)))
 curves = [c.curve for c in coils]
 curves_to_vtk(curves, OUT_DIR + "curves_init")
 pointData = {
-    "B_N": np.sum(bs.B().reshape((64, 64, 3)) * s.unitnormal(), axis=2)[:, :, None]
+    "B_N": np.sum(bs.B().reshape((256, 256, 3)) * s.unitnormal(), axis=2)[:, :, None]
 }
 s.to_vtk(OUT_DIR + "surf_init", extra_data=pointData)
 
@@ -124,7 +137,7 @@ def fun(dofs):
     J = JF.J()
     grad = JF.dJ()
     jf = Jf.J()
-    BdotN = np.mean(np.abs(np.sum(bs.B().reshape((64, 64, 3)) * s.unitnormal(), axis=2)))
+    BdotN = np.mean(np.abs(np.sum(bs.B().reshape((256, 256, 3)) * s.unitnormal(), axis=2)))
     outstr = f"J={J:.1e}, Jf={jf:.1e}, ⟨B·n⟩={BdotN:.1e}"
     cl_string = ", ".join([f"{J.J():.1f}" for J in Jls])
     kap_string = ", ".join(f"{np.max(c.kappa()):.1f}" for c in base_curves)
@@ -156,7 +169,9 @@ res = minimize(
 )
 
 curves_to_vtk(curves, OUT_DIR + f"curves_opt_short")
-pointData = {"B_N": np.sum(bs.B().reshape((64, 64, 3)) * s.unitnormal(), axis=2)[:, :, None]}
+pointData = {"B_N": np.sum(bs.B().reshape((256, 256, 3)) * s.unitnormal(), axis=2)[:, :, None]}
 s.to_vtk(OUT_DIR + "surf_opt_short", extra_data=pointData)
 
-curves[0].plot()
+print(curves[0].x0)
+print(curves[1].x0)
+print(curves[2].x0)
