@@ -80,9 +80,10 @@ s.plot(ax=ax,show=False, alpha=0.2)
 #c.plot()
 c_xyz.plot(ax=ax, alpha=1)
 
-
+'''
 s.plot("mayavi", ax =ax, show=False, close=True)
 c.plot("mayavi", ax=ax, show=False, close=True)
 c_xyz.plot("mayavi", ax=ax, show=True, close=True)
+'''
 
 plt.show()

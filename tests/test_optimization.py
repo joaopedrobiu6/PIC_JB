@@ -1,4 +1,5 @@
 import os
+import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import minimize
 from simsopt.objectives import Weight
@@ -20,23 +21,22 @@ from simsopt.geo import (
 OUT_DIR = "./output/"
 os.makedirs(OUT_DIR, exist_ok=True)
 
-LENGTH_WEIGHT = Weight(1e-6)
+LENGTH_WEIGHT = Weight(1e-9)
 
 # Threshold and weight for the coil-to-coil distance penalty in the objective function:
 CC_THRESHOLD = 0.01
-CC_WEIGHT = 1000
-
-# Threshold and weight for the coil-to-surface distance penalty in the objective function:
-CS_THRESHOLD = 0.3
-CS_WEIGHT = 10
+CC_WEIGHT = 1
 
 # Threshold and weight for the curvature penalty in the objective function:
 CURVATURE_THRESHOLD = 5.
-CURVATURE_WEIGHT = 1e-2
+CURVATURE_WEIGHT = 1e-5
 
 # Threshold and weight for the mean squared curvature penalty in the objective function:
 MSC_THRESHOLD = 5
-MSC_WEIGHT = 1e-6
+MSC_WEIGHT = 1e-9
+
+MAXITER = 400 
+
 
 # SURFACE INPUT FILES FOR TESTING
 circular_tokamak = ("/home/joaobiu/simsopt_curvecws/tests/test_files/wout_circular_tokamak_reference.nc")
@@ -47,7 +47,12 @@ filename = "/home/joaobiu/simsopt_curvecws/tests/test_files/wout_n3are_R7.75B5.7
 s = SurfaceRZFourier.from_wout(
     w7x, range="half period", ntheta=256, nphi=256
 )
-cws = SurfaceRZFourier.from_nphi_ntheta(255, 256, "half period", 1)
+
+s1 = SurfaceRZFourier.from_wout(
+    w7x, range="full torus", ntheta=256, nphi=256
+)
+
+cws = SurfaceRZFourier.from_nphi_ntheta(255, 256, "half period", s.nfp)
 
 R = s.get_rc(0, 0)
 cws.set_dofs([R, 2, 2])
@@ -58,13 +63,13 @@ cws.set_dofs([R, 2, 2])
 
 ncoils = 4
 
-phi_array = np.linspace(0, 2 * np.pi, ncoils)
+phi_array = np.linspace(0, np.pi/s.nfp, ncoils, endpoint=False)
 print(phi_array)
 
 base_curves = []
 
 
-for i in range(ncoils - 1):
+for i in range(ncoils):
 
     curve_cws = CurveCWSFourier(
         mpol=cws.mpol,
@@ -75,7 +80,7 @@ for i in range(ncoils - 1):
         nfp=cws.nfp,
         stellsym=cws.stellsym,
     )
-    curve_cws.set_dofs([1, 0, 0, 0, 0, phi_array[i], 0, 0]) 
+    curve_cws.set_dofs([1, 0.1, 0.1, 0.1, 0, phi_array[i], 0.1, 0.1]) 
     base_curves.append(curve_cws)
     
 
@@ -85,7 +90,7 @@ base_currents[0].fix_all()
 
 coils = []
 
-for i in range(ncoils - 1):
+for i in range(ncoils):
     coils.append(Coil(base_curves[i], base_currents[i]))
 
 coils[0].curve.fix(0)
@@ -116,23 +121,21 @@ print(Jccdist.shortest_distance())
 Jf = SquaredFlux(s, bs)
 Jls = [CurveLength(c) for c in base_curves]
 Jccdist = CurveCurveDistance(curves, CC_THRESHOLD, num_basecurves=ncoils)
-Jcsdist = CurveSurfaceDistance(curves, s, CS_THRESHOLD)
 Jcs = [LpCurveCurvature(c, 2, CURVATURE_THRESHOLD) for c in base_curves]
 Jmscs = [MeanSquaredCurvature(c) for c in base_curves]
 
 
 JF = (
     Jf
-    + LENGTH_WEIGHT * sum(Jls)
-    + CC_WEIGHT * Jccdist
-    + CURVATURE_WEIGHT * sum(Jcs)
-    + MSC_WEIGHT * sum(QuadraticPenalty(J, MSC_THRESHOLD) for J in Jmscs)
+    #+ LENGTH_WEIGHT * sum(Jls)
+    #+ CC_WEIGHT * Jccdist
+    #+ CURVATURE_WEIGHT * sum(Jcs)
+    #+ MSC_WEIGHT * sum(QuadraticPenalty(J, MSC_THRESHOLD) for J in Jmscs)
 )
 
 
-
-
 def fun(dofs):
+    print(dofs)
     JF.x = dofs
     J = JF.J()
     grad = JF.dJ()
@@ -148,8 +151,9 @@ def fun(dofs):
     print(outstr)
     return J, grad
 
-f = fun
 dofs = JF.x
+'''
+f = fun
 np.random.seed(1)
 h = np.random.uniform(size=dofs.shape)
 J0, dJ0 = f(dofs)
@@ -158,13 +162,14 @@ for eps in [1e-3, 1e-4, 1e-5, 1e-6, 1e-7]:
     J1, _ = f(dofs + eps * h)
     J2, _ = f(dofs - eps * h)
     print("err", (J1 - J2) / (2 * eps) - dJh)
-
+'''
 
 res = minimize(
     fun,
     dofs,
     jac=True,
-    method="L-BFGS-B",
+    method="BFGS",
+    options={"maxiter": MAXITER, "maxcor": 300},
     tol=1e-15,
 )
 
@@ -175,3 +180,21 @@ s.to_vtk(OUT_DIR + "surf_opt_short", extra_data=pointData)
 print(curves[0].x0)
 print(curves[1].x0)
 print(curves[2].x0)
+
+fig = plt.figure()
+ax = fig.add_subplot(projection='3d')
+
+ax.set_xlim3d(-R-2, R+2)
+ax.set_ylim3d(-R-2, R+2)
+ax.set_zlim3d(-1, 1)
+
+for i in range(0, len(curves)):
+    x = curves[i].gamma()[:, 0]
+    y = curves[i].gamma()[:, 1]
+    z = curves[i].gamma()[:, 2]
+    ax.plot(x, y, z)
+
+s1.plot(ax = ax, show=True, alpha=0.5)
+cws.plot(ax=ax, show=True, alpha = 0.5)
+
+plt.show()
