@@ -35,6 +35,10 @@ c_xyz.set("yc(0)", 0)
 c_xyz.set("yc(1)", 0)
 c_xyz.set("zs(1)", 4)
 
+print(c.dgamma_by_dcoeff())
+print("#################")
+print(c_xyz.dgamma_by_dcoeff())
+exit()
 
 current = Current(1E5)
 coils_cws =  [Coil(c, current)]
