@@ -14,4 +14,4 @@ curve_cws.set_dofs([1, 0, 0.1, 0, 1, 0, 0.1, 0])
 CWSt = 2*np.pi*0.4
 print(surf.dof_names)
 
-print(curve_cws.dgamma_by_dcoeff()[0])
+print(curve_cws.dgammadash_by_dcoeff()[0])
