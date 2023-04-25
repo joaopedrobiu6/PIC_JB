@@ -34,7 +34,6 @@ MSC_THRESHOLD = 5
 MSC_WEIGHT = 1e-6
 
 # SURFACE INPUT FILES FOR TESTING
-#wout = "/Users/rogeriojorge/local/vmec_equilibria/NCSX/li383_1.4m/wout_li383_1.4m.nc"
 wout = "/home/joaobiu/PIC/vmec_equilibria/NCSX/li383_1.4m/wout_li383_1.4m.nc"
 
 MAXITER = 450 
@@ -42,8 +41,8 @@ minor_radius_factor_cws = 1.8
 ncoils = 5
 order = 6 # order of dofs of cws curves
 numquadpoints = 200
-ntheta = 254
-nphi = 254
+ntheta = 290
+nphi = 290
 
 # CREATE SURFACES
 s = SurfaceRZFourier.from_wout(wout, range="half period", ntheta=ntheta, nphi=nphi)
@@ -90,6 +89,9 @@ curves_to_vtk(curves, OUT_DIR + "curves_init")
 pointData = {"B_N": np.sum(bs.B().reshape((nphi, ntheta, 3)) * s.unitnormal(), axis=2)[:, :, None]}
 s.to_vtk(OUT_DIR + "surf_init", extra_data=pointData)
 cws.to_vtk(OUT_DIR + "cws_init")
+
+Jccdist = CurveCurveDistance(curves, CC_THRESHOLD, num_basecurves=ncoils)
+print(Jccdist.shortest_distance())
 
 Jf = SquaredFlux(s, bs)
 Jls = [CurveLength(c) for c in base_curves]

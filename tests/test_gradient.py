@@ -2,7 +2,7 @@ from simsopt.geo import CurveCWSFourier, SurfaceRZFourier
 import numpy as np
 
 # CREATE CWS
-dofs = [1, 0.1, 0.1] # RBC00, RBC11, ZBS11
+dofs = [1, 0.1, 0.1] # RBC00, RBC10, ZBS10
 quadpoints_phi = np.arange(0, 64, 1)
 quadpoints_theta = quadpoints_phi.copy()
 surf = SurfaceRZFourier(nfp=1, stellsym=True, mpol=1, ntor=0, quadpoints_phi=quadpoints_phi, quadpoints_theta=quadpoints_theta)
