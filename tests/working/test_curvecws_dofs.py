@@ -10,6 +10,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 from simsopt.geo import CurveCWSFourier, SurfaceRZFourier, CurveXYZFourier
 
+
+print("\n\n****************************************************")
+print("Compares gamma(), gammadash(), gammadashdash() and gammadashdash() of a CurveCWSFourier and a CurveXYZFourier")
+print("****************************************************\n\n")
+
 ###################################################
 ###################################################
 ##################CurveCWSFourier##################
@@ -38,33 +43,37 @@ c_xyz.set("yc(0)", 0)
 c_xyz.set("yc(1)", 0)
 c_xyz.set("zs(1)", 1)
 
-
 gamma_diff = c_xyz.gamma() - c_cws.gamma()
 gammadash_diff = c_xyz.gammadash() - c_cws.gammadash()
 gammadashdash_diff = c_xyz.gammadashdash() - c_cws.gammadashdash()
 gammadashdashdash_diff = c_xyz.gammadashdashdash() - c_cws.gammadashdashdash()
 
-#dgamma_by_dcoeff_diff = c_xyz.dgamma_by_dcoeff() - c_cws.dgamma_by_dcoeff()
-
+print("XYZ.gamma() - CWS.gamma()")
 print(gamma_diff)
 print("******************************************************************************************")
+print("XYZ.gammadash() - CWS.gammadash()")
 print(gammadash_diff)
 print("******************************************************************************************")
+print("XYZ.gammadashdash() - CWS.gammadashdash()")
 print(gammadashdash_diff)
 print("******************************************************************************************")
+print("XYZ.gammadashdashdash() - CWS.gammadashdashdash()")
 print(gammadashdashdash_diff)
 print("******************************************************************************************")
+print("sum(abs(values)):")
 print(sum(gamma_diff))
 print(sum(gammadash_diff))
 print(sum(gammadashdash_diff))
 print(sum(gammadashdashdash_diff))
 
 
-#print(sum(abs(dgamma_by_dcoeff_diff)))
 
-# PLOTS
+
+'''
+#PLOTS
 fig = plt.figure()
 ax = fig.add_subplot(projection='3d')
 
 c_cws.plot(ax=ax,show=True, plot_derivative=True)
-#c_xyz.plot(ax=ax, show=True, plot_derivative=True)
+c_xyz.plot(ax=ax, show=True, plot_derivative=True)
+'''
