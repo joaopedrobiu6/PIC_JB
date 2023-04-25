@@ -35,10 +35,10 @@ c_xyz.set("yc(0)", 0)
 c_xyz.set("yc(1)", 0)
 c_xyz.set("zs(1)", 4)
 
-print(c.dgamma_by_dcoeff())
-print("#################")
-print(c_xyz.dgamma_by_dcoeff())
-exit()
+#print(c.dgamma_by_dcoeff())
+#print("#################")
+#print(c_xyz.dgamma_by_dcoeff())
+
 
 current = Current(1E5)
 coils_cws =  [Coil(c, current)]
@@ -55,7 +55,7 @@ squaredflux_xyz = Jf_cws.J()
 Bcoil_cws = bs_cws.B()
 Bcoil_xyz = bs_xyz.B()
 
-'''
+
 print("Bcoil_cws: \n", Bcoil_cws)
 print("Bcoil_cws shape: ", Bcoil_cws.shape)
 print("####################################################################")
@@ -63,7 +63,8 @@ print("Bcoil_xyz: \n", Bcoil_xyz)
 print("Bcoil_cws shape: ", Bcoil_cws.shape)
 print("####################################################################")
 print("Bcoil difference: \n", Bcoil_cws - Bcoil_xyz)
-'''
+
+
 
 print("Squared Flux:")
 print("With CurveXYZFourier: ", Jf_xyz.J())

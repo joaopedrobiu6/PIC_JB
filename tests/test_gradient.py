@@ -1,0 +1,17 @@
+from simsopt.geo import CurveCWSFourier, SurfaceRZFourier
+import numpy as np
+
+# CREATE CWS
+dofs = [1, 0.1, 0.1] # RBC00, RBC11, ZBS11
+quadpoints_phi = np.arange(0, 64, 1)
+quadpoints_theta = quadpoints_phi.copy()
+surf = SurfaceRZFourier(nfp=1, stellsym=True, mpol=1, ntor=0, quadpoints_phi=quadpoints_phi, quadpoints_theta=quadpoints_theta)
+surf.set_dofs(dofs)
+
+curve_cws = CurveCWSFourier(surf.mpol, surf.ntor, surf.x, 64, 1, surf.nfp, surf.stellsym)
+curve_cws.set_dofs([1, 0, 0.1, 0, 1, 0, 0.1, 0])
+
+CWSt = 2*np.pi*0.4
+print(surf.dof_names)
+
+print(curve_cws.dgamma_by_dcoeff()[0])
