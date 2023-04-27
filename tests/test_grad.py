@@ -11,4 +11,4 @@ surf.set_dofs(dofs)
 curve_cws = CurveCWSFourier(surf.mpol, surf.ntor, surf.x, 64, 1, surf.nfp, surf.stellsym)
 curve_cws.set_dofs([1, 0, 0.1, 0, 1, 0, 0.1, 0])
 
-curve_cws.dgammadash_by_dcoeff()
+print(curve_cws.dgammadash_by_dcoeff()[0])
