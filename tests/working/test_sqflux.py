@@ -55,7 +55,7 @@ squaredflux_xyz = Jf_cws.J()
 Bcoil_cws = bs_cws.B()
 Bcoil_xyz = bs_xyz.B()
 
-
+'''
 print("Bcoil_cws: \n", Bcoil_cws)
 print("Bcoil_cws shape: ", Bcoil_cws.shape)
 print("####################################################################")
@@ -72,9 +72,17 @@ print("With CurveCWSFourier: ", Jf_cws.J())
 print("dJ:")
 print("With CurveXYZFourier: ", Jf_xyz.dJ().shape)
 print("With CurveCWSFourier: ", Jf_cws.dJ().shape)
+'''
+
+
+if Jf_xyz.J()-Jf_cws.J() < 1e-15:
+    print("test_sqflux.py - sucess")
+else:
+    print("test_sqflux.py - failed")
 
 
 
+'''
 #PLOT
 fig = plt.figure()
 ax = fig.add_subplot(projection='3d')
@@ -83,12 +91,10 @@ s.plot(ax=ax,show=False, alpha=0.2)
 
 #c.plot(ax=ax, show=False)
 #c.plot()
-c_xyz.plot(ax=ax, alpha=1)
 
-'''
+c_xyz.plot(ax=ax, alpha=1)
 s.plot("mayavi", ax =ax, show=False, close=True)
 c.plot("mayavi", ax=ax, show=False, close=True)
 c_xyz.plot("mayavi", ax=ax, show=True, close=True)
-'''
-
 plt.show()
+'''

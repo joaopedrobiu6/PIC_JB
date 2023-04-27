@@ -4,7 +4,7 @@ in the number of quadpoints
 
 Both Curves have the same dimensions and positions.
 
-The surface used is a circular Tokamak and the CWS is a circular torus
+The surface used is W7X's and the CWS is a circular torus
 '''
 
 from simsopt.geo import CurveCWSFourier, SurfaceRZFourier, CurveLength, CurveXYZFourier
@@ -20,7 +20,7 @@ w7x = "/home/joaobiu/simsopt_curvecws/tests/test_files/wout_W7-X_without_coil_ri
 filename = "/home/joaobiu/simsopt_curvecws/tests/test_files/wout_n3are_R7.75B5.7.nc"
 
 # CREATE SURFACES
-s = SurfaceRZFourier.from_wout(circular_tokamak, range="half period", ntheta=256, nphi=256)
+s = SurfaceRZFourier.from_wout(w7x, range="half period", ntheta=256, nphi=256)
 surf = SurfaceRZFourier.from_nphi_ntheta(255, 256, "half period", 1)
 
 R = s.get_rc(0, 0)
@@ -60,7 +60,6 @@ for i in range(40, 400, 10):
     sf_xyz.append(squaredflux_xyz)
 
 fig, ax = plt.subplots(1, 3)
-
 ax[0].plot(quad, sf_cws, "-", color="red")
 #ax[0].set_xlabel("num quadpoints")
 ax[0].set_ylabel("Squared Flux")
@@ -77,9 +76,7 @@ ax[2].plot(quad, diff, "-", color="green")
 ax[2].set_xlabel("num quadpoints")
 ax[2].set_ylabel("Squared Flux Difference")
 
-fig.suptitle("Circular Tokamak")
-
-fig.savefig("diff_tokamak.png")
+fig.suptitle("W7X")
 
 """ 
 #PLOT
@@ -96,5 +93,3 @@ s.plot("plotly", show=True, close=True)
 c.plot("mayavi", ax=ax, show=False, close=True)
 c_xyz.plot("mayavi", ax=ax, show=True, close=True)
 """
-
-plt.show()

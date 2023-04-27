@@ -11,10 +11,6 @@ import numpy as np
 from simsopt.geo import CurveCWSFourier, SurfaceRZFourier, CurveXYZFourier
 
 
-print("\n\n****************************************************")
-print("Compares gamma(), gammadash(), gammadashdash() and gammadashdash() of a CurveCWSFourier and a CurveXYZFourier")
-print("****************************************************\n\n")
-
 ###################################################
 ###################################################
 ##################CurveCWSFourier##################
@@ -48,6 +44,19 @@ gammadash_diff = c_xyz.gammadash() - c_cws.gammadash()
 gammadashdash_diff = c_xyz.gammadashdash() - c_cws.gammadashdash()
 gammadashdashdash_diff = c_xyz.gammadashdashdash() - c_cws.gammadashdashdash()
 
+gamma_diff_sum = sum(abs(gamma_diff))
+gammadash_diff_sum = sum(abs(gammadash_diff))
+gammadashdash_diff_sum = sum(abs(gammadashdash_diff))
+gammadashdashdash_diff_sum = sum(abs(gammadashdashdash_diff))
+
+if gamma_diff_sum.any() < 1e-14 and gammadash_diff_sum.any() < 1e-14 and gammadashdash_diff_sum.any() < 1e-14 and gammadashdashdash_diff_sum.any() < 1e-14:
+    print("test_curvecws_dofs.py - sucess")
+else:
+    print("test_curvecws_dofs.py - failed")
+
+
+
+'''
 print("XYZ.gamma() - CWS.gamma()")
 print(gamma_diff)
 print("******************************************************************************************")
@@ -65,7 +74,7 @@ print(sum(gamma_diff))
 print(sum(gammadash_diff))
 print(sum(gammadashdash_diff))
 print(sum(gammadashdashdash_diff))
-
+'''
 
 
 

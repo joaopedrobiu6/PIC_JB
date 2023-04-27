@@ -9,10 +9,13 @@ filename = "/home/joaobiu/simsopt_curvecws/tests/test_files/wout_n3are_R7.75B5.7
 #s = SurfaceRZFourier.from_nphi_ntheta(32, 32, "full torus", 1)
 s = SurfaceRZFourier.from_wout(w7x, range="full torus", ntheta=64, nphi=64)
 
-print(s.mpol, s.ntor)
-print(s.x.shape)
 c = CurveCWSFourier(s.mpol, s.ntor, s.x, 150, 1, s.nfp, s.stellsym)
 c.set_dofs([1, 0, 0, 0, 2, 1, 4, 0])
+
+if c.gammadash().any() != None:
+    print("test_deriative.py - sucess")
+else:
+    print("test_deriative.py - failed")
 
 def plot_deriv():
     cdd = c.gamma()
@@ -33,4 +36,3 @@ def plot_deriv():
     plt.plot(c.gamma()[:, 0], c.gamma()[:, 1], c.gamma()[:, 2])
     ax.quiver(x, y, z, 0.1 * xt, 0.1 * yt, 0.1 * zt, arrow_length_ratio=0.1, color="r")
 
-    c.plot(plot_derivative=True)
