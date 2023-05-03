@@ -55,6 +55,7 @@ squaredflux_xyz = Jf_cws.J()
 Bcoil_cws = bs_cws.B()
 Bcoil_xyz = bs_xyz.B()
 
+
 '''
 print("Bcoil_cws: \n", Bcoil_cws)
 print("Bcoil_cws shape: ", Bcoil_cws.shape)
@@ -64,6 +65,7 @@ print("Bcoil_cws shape: ", Bcoil_cws.shape)
 print("####################################################################")
 print("Bcoil difference: \n", Bcoil_cws - Bcoil_xyz)
 
+'''
 
 
 print("Squared Flux:")
@@ -72,7 +74,6 @@ print("With CurveCWSFourier: ", Jf_cws.J())
 print("dJ:")
 print("With CurveXYZFourier: ", Jf_xyz.dJ().shape)
 print("With CurveCWSFourier: ", Jf_cws.dJ().shape)
-'''
 
 
 if Jf_xyz.J()-Jf_cws.J() < 1e-15:

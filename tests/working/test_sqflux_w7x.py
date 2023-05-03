@@ -57,11 +57,11 @@ print("Bcoil_xyz: \n", Bcoil_xyz)
 print("Bcoil_cws shape: ", Bcoil_cws.shape)
 print("####################################################################")
 print("Bcoil difference: \n", Bcoil_cws - Bcoil_xyz)
+'''
 
 print("Squared Flux:")
 print("With CurveXYZFourier: ", Jf_xyz.J())
 print("With CurveCWSFourier: ", Jf_cws.J())
-'''
 
 if abs(Jf_xyz.J()-Jf_cws.J()) < 1e-15:
     print("test_sqflux_w7x.py - sucess")
