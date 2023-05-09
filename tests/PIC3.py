@@ -31,7 +31,7 @@ MSC_THRESHOLD = 6
 MSC_WEIGHT = 0.01
 
 # SURFACE INPUT FILES FOR TESTING
-wout = "/home/joaobiu/pic/vmec_equilibria/NCSX/li383_1.4m/wout_li383_1.4m.nc"
+wout = "/home/joaobiu/pic/vmec_equilibria/LHD/090493t2330/wout_LHD_090493t2330.nc"
 
 MAXITER = 1000 
 minor_radius_factor_cws = 1.9
@@ -64,8 +64,8 @@ for i in range(ncoils):
     )
     angle = (i+0.5)*(2*np.pi)/((2)*s.nfp*ncoils)
     curve_dofs = np.zeros(len(curve_cws.get_dofs()),)
-    curve_dofs[0] = 2
-    curve_dofs[2*order+2] = 2
+    curve_dofs[0] = 1
+    curve_dofs[2*order+2] = 0
     curve_dofs[2*order+3] = angle
     curve_cws.set_dofs(curve_dofs)
     curve_cws.fix(0)

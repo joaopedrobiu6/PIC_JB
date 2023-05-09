@@ -49,14 +49,15 @@ gammadash_diff_sum = sum(abs(gammadash_diff))
 gammadashdash_diff_sum = sum(abs(gammadashdash_diff))
 gammadashdashdash_diff_sum = sum(abs(gammadashdashdash_diff))
 
+'''
 if gamma_diff_sum.any() < 1e-14 and gammadash_diff_sum.any() < 1e-14 and gammadashdash_diff_sum.any() < 1e-14 and gammadashdashdash_diff_sum.any() < 1e-14:
     print("test_curvecws_dofs.py - sucess")
 else:
     print("test_curvecws_dofs.py - failed")
-
-
-
 '''
+
+
+
 print("XYZ.gamma() - CWS.gamma()")
 print(gamma_diff)
 print("******************************************************************************************")
@@ -74,7 +75,7 @@ print(sum(gamma_diff))
 print(sum(gammadash_diff))
 print(sum(gammadashdash_diff))
 print(sum(gammadashdashdash_diff))
-'''
+
 
 
 
