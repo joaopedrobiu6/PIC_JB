@@ -1,0 +1,21 @@
+J=3.472e-01
+4coils
+
+LENGTH_THRESHOLD = 4.5
+#LENGTH_WEIGHT = 0.1
+LENGTH_WEIGHT = 1e-5
+
+# Threshold and weight for the coil-to-coil distance penalty in the objective function:
+CC_THRESHOLD = 0.15
+#CC_WEIGHT = 1000
+CC_WEIGHT = 10
+
+# Threshold and weight for the curvature penalty in the objective function:
+CURVATURE_THRESHOLD = 6.5
+#CURVATURE_WEIGHT = 0.1
+CURVATURE_WEIGHT = 0.01
+
+# Threshold and weight for the mean squared curvature penalty in the objective function:
+MSC_THRESHOLD = 8
+#MSC_WEIGHT = 0.01
+MSC_WEIGHT = 0.01
