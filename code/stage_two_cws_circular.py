@@ -11,7 +11,7 @@ from simsopt.geo import (
     MeanSquaredCurvature, LpCurveCurvature, CurveCWSFourier, ArclengthVariation
 )
     
-OUT_DIR = "./output_cws/"
+OUT_DIR = "./output_cws_circular/"
 os.makedirs(OUT_DIR, exist_ok=True)
 
 # Threshold and weight for the maximum length of each individual coil:
@@ -47,16 +47,19 @@ quadpoints = 200 #13 * order
 ntheta = 50
 nphi = 42
 
-# CREATE FLUX SURFACE
+# CREATE FLUX SURFACE (BOUNDARY)
 s = SurfaceRZFourier.from_vmec_input(wout, range="half period", ntheta=ntheta, nphi=nphi)
 s_full = SurfaceRZFourier.from_vmec_input(wout, range="full torus", ntheta=ntheta, nphi=int(nphi*2*s.nfp))
-# CREATE COIL WINDING SURFACE SURFACE
-cws = SurfaceRZFourier.from_vmec_input(wout, range="half period", ntheta=ntheta, nphi=nphi)
-cws_full = SurfaceRZFourier.from_vmec_input(wout, range="full torus", ntheta=ntheta, nphi=int(nphi*2*s.nfp))
-cws.extend_via_normal(0.2)
-cws_full.extend_via_normal(0.2)
+# CREATE COIL WINDING SURFACE
+cws = SurfaceRZFourier.from_nphi_ntheta(nphi, ntheta, "half period", s.nfp)
+cws_full = SurfaceRZFourier.from_nphi_ntheta(int(nphi*2*s.nfp), ntheta, "full torus", s.nfp)
 
-# CREATE CURVES + COILS     
+R = s.get_rc(0, 0)
+minor_radius_factor_cws = 1 + 0.2/s.get_zs(1, 0)
+cws.set_dofs([R, s.get_zs(1, 0)*minor_radius_factor_cws, s.get_zs(1, 0)*minor_radius_factor_cws])
+cws_full.set_dofs([R, s.get_zs(1, 0)*minor_radius_factor_cws, s.get_zs(1, 0)*minor_radius_factor_cws])
+
+# CREATE CURVES + COILS
 base_curves = []
 for i in range(ncoils):
     curve_cws = CurveCWSFourier(
