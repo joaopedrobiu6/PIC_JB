@@ -20,17 +20,17 @@ LENGTH_THRESHOLD = 20
 LENGTH_WEIGHT = 1e-8
 
 # Threshold and weight for the coil-to-coil distance penalty in the objective function:
-CC_THRESHOLD = 0.1 
+CC_THRESHOLD = 0.08
 #CC_WEIGHT = 1000
 CC_WEIGHT = 1000
 
 # Threshold and weight for the curvature penalty in the objective function:
-CURVATURE_THRESHOLD = 50
+CURVATURE_THRESHOLD = 60    
 #CURVATURE_WEIGHT = 0.1
-CURVATURE_WEIGHT = 1e-10
+CURVATURE_WEIGHT = 1e-5
 
 # Threshold and weight for the mean squared curvature penalty in the objective function:
-MSC_THRESHOLD = 10
+MSC_THRESHOLD = 200
 #MSC_WEIGHT = 0.01
 MSC_WEIGHT = 1e-10
 
@@ -53,8 +53,9 @@ s_full = SurfaceRZFourier.from_vmec_input(wout, range="full torus", ntheta=nthet
 # CREATE COIL WINDING SURFACE SURFACE
 cws = SurfaceRZFourier.from_vmec_input(wout, range="half period", ntheta=ntheta, nphi=nphi)
 cws_full = SurfaceRZFourier.from_vmec_input(wout, range="full torus", ntheta=ntheta, nphi=int(nphi*2*s.nfp))
-cws.extend_via_normal(0.2)
-cws_full.extend_via_normal(0.2)
+
+cws.extend_via_normal(0.25)
+cws_full.extend_via_normal(0.25)
 
 # CREATE CURVES + COILS     
 base_curves = []
@@ -142,3 +143,4 @@ pointData = {"B_N": np.sum(bs.B().reshape((int(nphi*2*s_full.nfp), ntheta, 3)) *
 s_full.to_vtk(OUT_DIR + "surf_opt", extra_data=pointData)
 cws_full.to_vtk(OUT_DIR + "cws_opt")
 bs.set_points(s.gamma().reshape((-1, 3)))
+bs.save(OUT_DIR + "biot_savart_opt.json")

@@ -11,11 +11,38 @@ from simsopt.geo import curves_to_vtk, create_equally_spaced_curves
 from simsopt.field import BiotSavart
 from simsopt.field import Current, coils_via_symmetries
 from simsopt.geo import CurveLength, CurveCurveDistance, \
-    MeanSquaredCurvature, LpCurveCurvature, CurveSurfaceDistance
+    MeanSquaredCurvature, LpCurveCurvature, CurveSurfaceDistance, ArclengthVariation
 
-# Number of unique coil shapes, i.e. the number of coils per half field period:
-# (Since the configuration has nfp = 2, multiply by 4 to get the total number of coils.)
-ncoils = 4
+    
+# Directory for output
+OUT_DIR = "./stage_two/"
+os.makedirs(OUT_DIR, exist_ok=True)
+
+# Threshold and weight for the maximum length of each individual coil:
+LENGTH_THRESHOLD = 20
+#LENGTH_WEIGHT = 0.1
+LENGTH_WEIGHT = 1e-8
+
+# Threshold and weight for the coil-to-coil distance penalty in the objective function:
+CC_THRESHOLD = 0.1 
+#CC_WEIGHT = 1000
+CC_WEIGHT = 1000
+
+# Threshold and weight for the curvature penalty in the objective function:
+CURVATURE_THRESHOLD = 50
+#CURVATURE_WEIGHT = 0.1
+CURVATURE_WEIGHT = 1e-5
+
+# Threshold and weight for the mean squared curvature penalty in the objective function:
+MSC_THRESHOLD = 10
+#MSC_WEIGHT = 0.01
+MSC_WEIGHT = 1e-10
+
+ARCLENGTH_WEIGHT = 3e-8
+LENGTH_CON_WEIGHT = 0.1
+
+# SURFACE INPUT FILES FOR TESTING
+wout = '/home/joaobiu/simsopt_curvecws/examples/3_Advanced/input.axiTorus_nfp3_QA_final'
 
 # Major radius for the initial circular coils:
 R0 = 1.0
@@ -23,40 +50,12 @@ R0 = 1.0
 # Minor radius for the initial circular coils:
 R1 = 0.5
 
-# Number of Fourier modes describing each Cartesian component of each coil:
-order = 5
-
-# Weight on the curve lengths in the objective function. We use the `Weight`
-# class here to later easily adjust the scalar value and rerun the optimization
-# without having to rebuild the objective.
-LENGTH_WEIGHT = Weight(1e-6)
-
-# Threshold and weight for the coil-to-coil distance penalty in the objective function:
-CC_THRESHOLD = 0.1
-CC_WEIGHT = 1000
-
-# Threshold and weight for the coil-to-surface distance penalty in the objective function:
-CS_THRESHOLD = 0.3
-CS_WEIGHT = 10
-
-# Threshold and weight for the curvature penalty in the objective function:
-CURVATURE_THRESHOLD = 5.
-CURVATURE_WEIGHT = 1e-6
-
-# Threshold and weight for the mean squared curvature penalty in the objective function:
-MSC_THRESHOLD = 5
-MSC_WEIGHT = 1e-6
-
-# Number of iterations to perform:
-ci = "CI" in os.environ and os.environ['CI'].lower() in ['1', 'true']
-MAXITER = 150
-
-# File for the desired boundary magnetic surface:
-filename = '/home/joaobiu/simsopt_curvecws/tests/test_files/input.LandremanPaul2021_QA'
-
-# Directory for output
-OUT_DIR = "./stage_two/"
-os.makedirs(OUT_DIR, exist_ok=True)
+MAXITER = 1000 
+ncoils = 4
+order = 10 # order of dofs of cws curves
+quadpoints = 200 #13 * order
+ntheta = 50
+nphi = 42
 
 #######################################################
 # End of input parameters.
@@ -65,7 +64,7 @@ os.makedirs(OUT_DIR, exist_ok=True)
 # Initialize the boundary magnetic surface:
 nphi = 32
 ntheta = 32
-s = SurfaceRZFourier.from_vmec_input(filename, range="half period", nphi=nphi, ntheta=ntheta)
+s = SurfaceRZFourier.from_vmec_input(wout, range="half period", nphi=nphi, ntheta=ntheta)
 
 # Create the initial coils:
 base_curves = create_equally_spaced_curves(ncoils, s.nfp, stellsym=True, R0=R0, R1=R1, order=order)
@@ -85,27 +84,20 @@ pointData = {"B_N": np.sum(bs.B().reshape((nphi, ntheta, 3)) * s.unitnormal(), a
 s.to_vtk(OUT_DIR + "surf_init", extra_data=pointData)
 
 # Define the individual terms objective function:
-Jf = SquaredFlux(s, bs)
+
+Jf = SquaredFlux(s, bs, local=True)
 Jls = [CurveLength(c) for c in base_curves]
-Jccdist = CurveCurveDistance(curves, CC_THRESHOLD, num_basecurves=ncoils)
-Jcsdist = CurveSurfaceDistance(curves, s, CS_THRESHOLD)
-Jcs = [LpCurveCurvature(c, 2, CURVATURE_THRESHOLD) for c in base_curves]
+Jccdist = CurveCurveDistance(curves, CC_THRESHOLD, num_basecurves=len(curves))
+Jcs = [LpCurveCurvature(c, 2, CURVATURE_THRESHOLD) for i, c in enumerate(base_curves)]
 Jmscs = [MeanSquaredCurvature(c) for c in base_curves]
-
-
-# Form the total objective function. To do this, we can exploit the
-# fact that Optimizable objects with J() and dJ() functions can be
-# multiplied by scalars and added:
-JF = Jf \
-    + LENGTH_WEIGHT * sum(Jls) \
-    + CC_WEIGHT * Jccdist \
-    + CS_WEIGHT * Jcsdist \
-    + CURVATURE_WEIGHT * sum(Jcs) \
-    + MSC_WEIGHT * sum(QuadraticPenalty(J, MSC_THRESHOLD, "max") for J in Jmscs)
-
-# We don't have a general interface in SIMSOPT for optimisation problems that
-# are not in least-squares form, so we write a little wrapper function that we
-# pass directly to scipy.optimize.minimize
+Jals = [ArclengthVariation(c) for c in base_curves]
+J_LENGTH = LENGTH_WEIGHT * sum(Jls)
+J_CC = CC_WEIGHT * Jccdist
+J_CURVATURE = CURVATURE_WEIGHT * sum(Jcs)
+J_MSC = MSC_WEIGHT * sum(QuadraticPenalty(J, MSC_THRESHOLD, f="max") for i, J in enumerate(Jmscs))
+J_ALS = ARCLENGTH_WEIGHT * sum(Jals)
+J_LENGTH_PENALTY = LENGTH_CON_WEIGHT * sum([QuadraticPenalty(Jls[i], LENGTH_THRESHOLD, f="max") for i in range(len(base_curves))])
+JF = Jf + J_CC + J_LENGTH_PENALTY + J_CURVATURE + J_ALS + J_MSC + J_LENGTH
 
 
 def fun(dofs):
@@ -114,13 +106,12 @@ def fun(dofs):
     grad = JF.dJ()
     jf = Jf.J()
     BdotN = np.mean(np.abs(np.sum(bs.B().reshape((nphi, ntheta, 3)) * s.unitnormal(), axis=2)))
-    outstr = f"J={J:.1e}, Jf={jf:.1e}, ⟨B·n⟩={BdotN:.1e}"
+    outstr = f"J={J:.3e}, Jf={jf:.3e}, ⟨B·n⟩={BdotN:.1e}"
     cl_string = ", ".join([f"{J.J():.1f}" for J in Jls])
     kap_string = ", ".join(f"{np.max(c.kappa()):.1f}" for c in base_curves)
     msc_string = ", ".join(f"{J.J():.1f}" for J in Jmscs)
     outstr += f", Len=sum([{cl_string}])={sum(J.J() for J in Jls):.1f}, ϰ=[{kap_string}], ∫ϰ²/L=[{msc_string}]"
-    outstr += f", C-C-Sep={Jccdist.shortest_distance():.2f}, C-S-Sep={Jcsdist.shortest_distance():.2f}"
-    outstr += f", ║∇J║={np.linalg.norm(grad):.1e}"
+    outstr += f", C-C-Sep={Jccdist.shortest_distance():.2f}"
     print(outstr)
     return J, grad
 

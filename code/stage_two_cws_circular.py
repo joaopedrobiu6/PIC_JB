@@ -20,17 +20,17 @@ LENGTH_THRESHOLD = 20
 LENGTH_WEIGHT = 1e-8
 
 # Threshold and weight for the coil-to-coil distance penalty in the objective function:
-CC_THRESHOLD = 0.1 
+CC_THRESHOLD = 0.08
 #CC_WEIGHT = 1000
 CC_WEIGHT = 1000
 
 # Threshold and weight for the curvature penalty in the objective function:
-CURVATURE_THRESHOLD = 50
+CURVATURE_THRESHOLD = 60
 #CURVATURE_WEIGHT = 0.1
-CURVATURE_WEIGHT = 1e-10
+CURVATURE_WEIGHT = 1e-5
 
 # Threshold and weight for the mean squared curvature penalty in the objective function:
-MSC_THRESHOLD = 10
+MSC_THRESHOLD = 200
 #MSC_WEIGHT = 0.01
 MSC_WEIGHT = 1e-10
 
@@ -55,7 +55,7 @@ cws = SurfaceRZFourier.from_nphi_ntheta(nphi, ntheta, "half period", s.nfp)
 cws_full = SurfaceRZFourier.from_nphi_ntheta(int(nphi*2*s.nfp), ntheta, "full torus", s.nfp)
 
 R = s.get_rc(0, 0)
-minor_radius_factor_cws = 1 + 0.2/s.get_zs(1, 0)
+minor_radius_factor_cws = 1 + 0.25/s.get_zs(1, 0)
 cws.set_dofs([R, s.get_zs(1, 0)*minor_radius_factor_cws, s.get_zs(1, 0)*minor_radius_factor_cws])
 cws_full.set_dofs([R, s.get_zs(1, 0)*minor_radius_factor_cws, s.get_zs(1, 0)*minor_radius_factor_cws])
 
@@ -145,3 +145,4 @@ pointData = {"B_N": np.sum(bs.B().reshape((int(nphi*2*s_full.nfp), ntheta, 3)) *
 s_full.to_vtk(OUT_DIR + "surf_opt", extra_data=pointData)
 cws_full.to_vtk(OUT_DIR + "cws_opt")
 bs.set_points(s.gamma().reshape((-1, 3)))
+bs.save(OUT_DIR + "biot_savart_opt.json")
