@@ -79,7 +79,7 @@ def optimize_extend_via_normal_factor(factor):
         curve_cws.fix(0)
         curve_cws.fix(2*order+2)
         base_curves.append(curve_cws)
-    base_currents = [Current(1)*1e5 for i in range(ncoils)]
+    base_currents = [Current(1)*1e5 for _ in range(ncoils)]
     #base_currents[0].fix_all()
 
     coils = coils_via_symmetries(base_curves, base_currents, s.nfp, True)
