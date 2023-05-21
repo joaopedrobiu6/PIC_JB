@@ -10,23 +10,21 @@ from simsopt.geo import (
     CurveLength, CurveCurveDistance,
     MeanSquaredCurvature, LpCurveCurvature, CurveCWSFourier, ArclengthVariation
 )
-    
+
 OUT_DIR = "./output_cws/"
 os.makedirs(OUT_DIR, exist_ok=True)
 
 # Threshold and weight for the maximum length of each individual coil:
 LENGTH_THRESHOLD = 20
-#LENGTH_WEIGHT = 0.1
 LENGTH_WEIGHT = 1e-8
 
 # Threshold and weight for the coil-to-coil distance penalty in the objective function:
-CC_THRESHOLD = 0.08
+CC_THRESHOLD = 0.1
 #CC_WEIGHT = 1000
-CC_WEIGHT = 1000
+CC_WEIGHT = 100
 
 # Threshold and weight for the curvature penalty in the objective function:
-CURVATURE_THRESHOLD = 60    
-#CURVATURE_WEIGHT = 0.1
+CURVATURE_THRESHOLD = 60
 CURVATURE_WEIGHT = 1e-5
 
 # Threshold and weight for the mean squared curvature penalty in the objective function:
@@ -43,7 +41,7 @@ wout = '/home/joaobiu/simsopt_curvecws/examples/3_Advanced/input.axiTorus_nfp3_Q
 MAXITER = 2000 
 ncoils = 4
 order = 10 # order of dofs of cws curves
-quadpoints = 400 #13 * order
+quadpoints = 300 #13 * order
 ntheta = 50
 nphi = 42
 
