@@ -54,8 +54,8 @@ s_full = SurfaceRZFourier.from_vmec_input(wout, range="full torus", ntheta=nthet
 cws = SurfaceRZFourier.from_vmec_input(wout, range="half period", ntheta=ntheta, nphi=nphi)
 cws_full = SurfaceRZFourier.from_vmec_input(wout, range="full torus", ntheta=ntheta, nphi=int(nphi*2*s.nfp))
 
-cws.extend_via_normal(0.241)
-cws_full.extend_via_normal(0.241)
+cws.extend_via_normal(0.2525)
+cws_full.extend_via_normal(0.2525)
 
 # CREATE CURVES + COILS     
 base_curves = []

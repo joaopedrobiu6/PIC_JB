@@ -11,9 +11,6 @@ from simsopt.geo import (
     MeanSquaredCurvature, LpCurveCurvature, CurveCWSFourier, ArclengthVariation
 )
 import matplotlib.pyplot as plt
-
-OUT_DIR = "./output_cws_evn/"
-os.makedirs(OUT_DIR, exist_ok=True)
     
 # Threshold and weight for the maximum length of each individual coil:
 LENGTH_THRESHOLD = 20
@@ -41,6 +38,7 @@ LENGTH_CON_WEIGHT = 0.1
 # SURFACE INPUT FILES FOR TESTING
 wout = '/home/joaobiu/simsopt_curvecws/examples/3_Advanced/input.axiTorus_nfp3_QA_final'
 
+MAXITER = 70
 ncoils = 4
 order = 10 # order of dofs of cws curves
 quadpoints = 200 #13 * order
@@ -92,18 +90,14 @@ def optimize_extend_via_normal_factor(factor):
     curves = [c.curve for c in coils]
 
     bs.set_points(s.gamma().reshape((-1, 3)))
-    return bs, base_curves, curves, cws_full
+    return bs, base_curves, curves 
 
-factor = np.arange(0.20, 0.26, 0.03)
+factor = np.arange(0.22, 0.251, 0.001)
 j_list = []
 
-MAXITER = 70
 
 for n in factor:
-    bs, base_curves, curves, cws_full= optimize_extend_via_normal_factor(n)
-
-
-    print(len(base_curves))
+    bs, base_curves, curves = optimize_extend_via_normal_factor(n)
 
     Jf = SquaredFlux(s, bs, local=True)
     Jls = [CurveLength(c) for c in base_curves]
@@ -111,13 +105,14 @@ for n in factor:
     Jcs = [LpCurveCurvature(c, 2, CURVATURE_THRESHOLD) for i, c in enumerate(base_curves)]
     Jmscs = [MeanSquaredCurvature(c) for c in base_curves]
     Jals = [ArclengthVariation(c) for c in base_curves]
-    J_LENGTH = LENGTH_WEIGHT * sum(Jls)
+    J_LENGTH = (LENGTH_WEIGHT) * sum(Jls)
     J_CC = CC_WEIGHT * Jccdist
     J_CURVATURE = CURVATURE_WEIGHT * sum(Jcs)
     J_MSC = MSC_WEIGHT * sum(QuadraticPenalty(J, MSC_THRESHOLD, f="max") for i, J in enumerate(Jmscs))
     J_ALS = ARCLENGTH_WEIGHT * sum(Jals)
     J_LENGTH_PENALTY = LENGTH_CON_WEIGHT * sum([QuadraticPenalty(Jls[i], LENGTH_THRESHOLD, f="max") for i in range(len(base_curves))])
     JF = Jf + J_CC + J_LENGTH_PENALTY + J_CURVATURE + J_ALS + J_MSC + J_LENGTH
+
 
     def fun(dofs):
         JF.x = dofs
@@ -147,63 +142,8 @@ for n in factor:
         options={"maxiter": MAXITER, "maxcor": 300},
         tol=1e-15,
     )
-    print(f"{n:.4f}: {JF.J()}")
+    print(f"{n:.3e}: {JF.J()}")
     j_list.append(JF.J())
 
 plt.scatter(factor, j_list)
-plt.savefig("ext_via_normal.png")
-
-MAXITER = 1000
-
-bs, base_curves, curves, cws_full = optimize_extend_via_normal_factor(min(j_list))
-print(len(base_curves))
-
-Jf = SquaredFlux(s, bs, local=True)
-Jls = [CurveLength(c) for c in base_curves]
-Jccdist = CurveCurveDistance(curves, CC_THRESHOLD, num_basecurves=len(curves))
-Jcs = [LpCurveCurvature(c, 2, CURVATURE_THRESHOLD) for i, c in enumerate(base_curves)]
-Jmscs = [MeanSquaredCurvature(c) for c in base_curves]
-Jals = [ArclengthVariation(c) for c in base_curves]
-J_LENGTH = LENGTH_WEIGHT * sum(Jls)
-J_CC = CC_WEIGHT * Jccdist
-J_CURVATURE = CURVATURE_WEIGHT * sum(Jcs)
-J_MSC = MSC_WEIGHT * sum(QuadraticPenalty(J, MSC_THRESHOLD, f="max") for i, J in enumerate(Jmscs))
-J_ALS = ARCLENGTH_WEIGHT * sum(Jals)
-J_LENGTH_PENALTY = LENGTH_CON_WEIGHT * sum([QuadraticPenalty(Jls[i], LENGTH_THRESHOLD, f="max") for i in range(len(base_curves))])
-JF = Jf + J_CC + J_LENGTH_PENALTY + J_CURVATURE + J_ALS + J_MSC + J_LENGTH
-
-def fun(dofs):
-    JF.x = dofs
-    J = JF.J()
-    grad = JF.dJ()
-    jf = Jf.J()
-    BdotN = np.mean(np.abs(np.sum(bs.B().reshape((nphi, ntheta, 3)) * s.unitnormal(), axis=2)))
-    outstr = f"J={J:.3e}, Jf={jf:.3e}, ⟨B·n⟩={BdotN:.1e}"
-    cl_string = ", ".join([f"{J.J():.1f}" for J in Jls])
-    kap_string = ", ".join(f"{np.max(c.kappa()):.1f}" for c in base_curves)
-    msc_string = ", ".join(f"{J.J():.1f}" for J in Jmscs)
-    outstr += f", Len=sum([{cl_string}])={sum(J.J() for J in Jls):.1f}, ϰ=[{kap_string}], ∫ϰ²/L=[{msc_string}]"
-    outstr += f", C-C-Sep={Jccdist.shortest_distance():.2f}"
-    print(outstr)
-    return J, grad
-
-
-dofs = np.copy(JF.x)
-
-res = minimize(
-    fun,
-    dofs,
-    jac=True,
-    method="L-BFGS-B",
-    options={"maxiter": MAXITER, "maxcor": 300},
-    tol=1e-15,
-)
-
-bs.set_points(s_full.gamma().reshape((-1, 3)))
-curves_to_vtk(curves, f"{OUT_DIR}curves_opt")
-curves_to_vtk(base_curves, f"{OUT_DIR}base_curves2_opt")
-pointData = {"B_N": np.sum(bs.B().reshape((int(nphi*2*s_full.nfp), ntheta, 3)) * s_full.unitnormal(), axis=2)[:, :, None]}
-s_full.to_vtk(f"{OUT_DIR}surf_opt", extra_data=pointData)
-cws_full.to_vtk(f"{OUT_DIR}cws_opt")
-bs.set_points(s.gamma().reshape((-1, 3)))
-bs.save(f"{OUT_DIR}biot_savart_opt.json")
+plt.savefig("ext_via_normal5.png")

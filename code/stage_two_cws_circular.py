@@ -40,10 +40,10 @@ LENGTH_CON_WEIGHT = 0.1
 # SURFACE INPUT FILES FOR TESTING
 wout = '/home/joaobiu/simsopt_curvecws/examples/3_Advanced/input.axiTorus_nfp3_QA_final'
 
-MAXITER = 1000 
+MAXITER = 2000 
 ncoils = 4
 order = 10 # order of dofs of cws curves
-quadpoints = 200 #13 * order
+quadpoints = 400 #13 * order
 ntheta = 50
 nphi = 42
 
@@ -55,7 +55,7 @@ cws = SurfaceRZFourier.from_nphi_ntheta(nphi, ntheta, "half period", s.nfp)
 cws_full = SurfaceRZFourier.from_nphi_ntheta(int(nphi*2*s.nfp), ntheta, "full torus", s.nfp)
 
 R = s.get_rc(0, 0)
-minor_radius_factor_cws = 1 + 0.25/s.get_zs(1, 0)
+minor_radius_factor_cws = 1 + 0.2525/s.get_zs(1, 0)
 cws.set_dofs([R, s.get_zs(1, 0)*minor_radius_factor_cws, s.get_zs(1, 0)*minor_radius_factor_cws])
 cws_full.set_dofs([R, s.get_zs(1, 0)*minor_radius_factor_cws, s.get_zs(1, 0)*minor_radius_factor_cws])
 
