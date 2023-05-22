@@ -20,7 +20,7 @@ LENGTH_THRESHOLD = 20
 LENGTH_WEIGHT = 1e-8
 
 # Threshold and weight for the coil-to-coil distance penalty in the objective function:
-CC_THRESHOLD = 0.08
+CC_THRESHOLD = 0.1
 #CC_WEIGHT = 1000
 CC_WEIGHT = 1000
 
@@ -43,7 +43,7 @@ wout = '/home/joaobiu/simsopt_curvecws/examples/3_Advanced/input.axiTorus_nfp3_Q
 MAXITER = 2000 
 ncoils = 4
 order = 10 # order of dofs of cws curves
-quadpoints = 400 #13 * order
+quadpoints = 300 #13 * order
 ntheta = 50
 nphi = 42
 
@@ -55,7 +55,7 @@ cws = SurfaceRZFourier.from_nphi_ntheta(nphi, ntheta, "half period", s.nfp)
 cws_full = SurfaceRZFourier.from_nphi_ntheta(int(nphi*2*s.nfp), ntheta, "full torus", s.nfp)
 
 R = s.get_rc(0, 0)
-minor_radius_factor_cws = 1 + 0.2525/s.get_zs(1, 0)
+minor_radius_factor_cws = 1 + 0.2595/s.get_zs(1, 0)
 cws.set_dofs([R, s.get_zs(1, 0)*minor_radius_factor_cws, s.get_zs(1, 0)*minor_radius_factor_cws])
 cws_full.set_dofs([R, s.get_zs(1, 0)*minor_radius_factor_cws, s.get_zs(1, 0)*minor_radius_factor_cws])
 

@@ -2,6 +2,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import minimize
+from scipy.interpolate import UnivariateSpline
 from simsopt.geo import SurfaceRZFourier
 from simsopt.objectives import SquaredFlux
 from simsopt.objectives import QuadraticPenalty
@@ -36,7 +37,7 @@ def optimization_settings(LENGTH_THRESHOLD_, LENGTH_WEIGHT_, CC_THRESHOLD_, CC_W
 (LENGTH_THRESHOLD, LENGTH_WEIGHT, CC_THRESHOLD,
  CC_WEIGHT, CURVATURE_THRESHOLD, CURVATURE_WEIGHT,
  MSC_THRESHOLD, MSC_WEIGHT, ARCLENGTH_WEIGHT, 
- LENGTH_CON_WEIGHT, MAXITER) = optimization_settings(20, 1e-8, 0.1, 100, 60, 1e-5, 200, 1e-10, 3e-8, 0.1, 50)
+ LENGTH_CON_WEIGHT, MAXITER) = optimization_settings(20, 1e-8, 0.1, 100, 60, 1e-5, 20, 1e-9, 3e-8, 0.1, 50)
 
 OUT_DIR = "./evn/"
 os.makedirs(OUT_DIR, exist_ok=True)
@@ -85,7 +86,7 @@ def cws_and_curves(factor):
 
     return cws, cws_full, base_curves, base_currents
 
-factor_values = np.arange(0.250, 0.260, 0.0001)
+factor_values = np.arange(0.250, 0.260, 0.005) #np.arange(0.250, 0.260, 0.0001)
 J_values = []
 
 for i in factor_values:
@@ -133,9 +134,17 @@ for i in factor_values:
     print(f"{i:.4f}:    {JF.J():.3e}")
     J_values.append(JF.J())
 
+print(min(J_values))
+
+
+print(f"{min(J_values)}")
 plt.plot(factor_values, J_values, "-o", color = "red")
 plt.title("Extend via normal factor variation")
 plt.xlabel("extend_via_normal factor")
 plt.ylabel("JF.J()")
 plt.savefig("opt_evn_factor.png")
 plt.show()
+
+data = np.column_stack([factor_values, J_values])
+datafile_path = OUT_DIR + "data.txt"
+np.savetxt(datafile_path , data, fmt=['%f','%e'])
