@@ -86,7 +86,7 @@ def cws_and_curves(factor):
 
     return cws, cws_full, base_curves, base_currents
 
-factor_values = np.arange(0.250, 0.260, 0.005) #np.arange(0.250, 0.260, 0.0001)
+factor_values = np.arange(0.2560, 0.2570, 0.00001) #np.arange(0.250, 0.260, 0.0001)
 J_values = []
 
 for i in factor_values:
@@ -131,7 +131,7 @@ for i in factor_values:
         tol=1e-15,
     )
 
-    print(f"{i:.4f}:    {JF.J():.3e}")
+    print(f"{i:.6f}:    {JF.J():.3e}")
     J_values.append(JF.J())
 
 print(min(J_values))
@@ -146,5 +146,5 @@ plt.savefig("opt_evn_factor.png")
 plt.show()
 
 data = np.column_stack([factor_values, J_values])
-datafile_path = OUT_DIR + "data.txt"
+datafile_path = OUT_DIR + "data_65.txt"
 np.savetxt(datafile_path , data, fmt=['%f','%e'])
