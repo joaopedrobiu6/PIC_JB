@@ -86,7 +86,8 @@ def cws_and_curves(factor):
 
     return cws, cws_full, base_curves, base_currents
 
-factor_values = np.arange(0.2560, 0.2570, 0.00001) #np.arange(0.250, 0.260, 0.0001)
+#factor_values = np.arange(0.2560, 0.2570, 0.00001) #np.arange(0.250, 0.260, 0.0001)
+factor_values = np.arange(0.01, 0.4, 0.05)
 J_values = []
 
 for i in factor_values:
@@ -133,9 +134,6 @@ for i in factor_values:
 
     print(f"{i:.6f}:    {JF.J():.3e}")
     J_values.append(JF.J())
-
-print(min(J_values))
-
 
 print(f"{min(J_values)}")
 plt.plot(factor_values, J_values, "-o", color = "red")

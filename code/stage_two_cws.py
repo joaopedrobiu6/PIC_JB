@@ -44,7 +44,7 @@ order = 10 # order of dofs of cws curves
 quadpoints = 300 #13 * order
 ntheta = 50
 nphi = 42
-ext_via_normal_factor = 0.2565055055055055
+ext_via_normal_factor = 0.2565045045045045
 
 # CREATE FLUX SURFACE
 s = SurfaceRZFourier.from_vmec_input(wout, range="half period", ntheta=ntheta, nphi=nphi)
@@ -129,7 +129,7 @@ dofs = np.copy(JF.x)
 res = minimize(
     fun,
     dofs,
-    jac=True,
+    jac=True,   
     method="L-BFGS-B",
     options={"maxiter": MAXITER, "maxcor": 300},
     tol=1e-15,

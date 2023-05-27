@@ -4,7 +4,7 @@ CC_THRESHOLD: 0.1
 CC_WEIGHT: 100
 CURVATURE_THRESHOLD: 60
 CURVATURE_WEIGHT: 1e-05
-MSC_THRESHOLD: 200
+MSC_THRESHOLD: 60
 MSC_WEIGHT: 1e-09
 ARCLENGTH_WEIGHT: 3e-08
 LENGTH_CON_WEIGHT: 0.1
@@ -14,5 +14,5 @@ order: 10
 quadpoints: 300
 ntheta: 50
 nphi: 42
-ext_v_n: 0.2565055055055055
-J=2.765e-06, Jf=2.283e-06, ⟨B·n⟩=3.8e-04, Len=sum([3.7, 3.5, 3.7, 3.3])=14.2, ϰ=[60.1, 60.0, 60.1, 60.2], ∫ϰ²/L=[196.4, 134.3, 168.9, 172.6], C-C-Sep=0.10
+ext_v_n: 0.2565045045045045
+J=4.671e-06, Jf=3.748e-06, ⟨B·n⟩=4.9e-04, Len=sum([3.2, 3.2, 3.4, 3.0])=12.9, ϰ=[26.8, 40.3, 26.8, 29.4], ∫ϰ²/L=[74.0, 78.1, 80.4, 71.5], C-C-Sep=0.10

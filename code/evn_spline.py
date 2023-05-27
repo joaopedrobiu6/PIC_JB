@@ -15,7 +15,7 @@ def Read_Two_Column_File(file_name):
 
 x, y = Read_Two_Column_File('evn/data_65.txt')
 
-spl = UnivariateSpline(x, y, k=4, s=0)
+spl = UnivariateSpline(x, y, k=3, s=0)
 x_ = np.linspace(0.256, 0.257, 1000)
 plt.plot(x_, spl(x_), 'g', lw='1')
 list_spl = []
@@ -23,6 +23,13 @@ for i in range(0, len(spl(x_))):
     list_spl.append(spl(x_)[i])
 
 min_x = x_[list_spl.index(min(spl(x_)))]
-print(f"{min_x} {min(list_spl)}")
-
+print(f"Minimum:\nFactor: {min_x}\nJF.J(): {min(list_spl)}")
+plt.scatter(min_x ,min(list_spl), color = "red")
+plt.title("Extend via normal factor variation")
+plt.xlabel("extend_via_normal factor")
+plt.ylabel("JF.J()")
+plt.savefig("opt_evn_factor.png")
 plt.show()
+
+
+plt.show()     
