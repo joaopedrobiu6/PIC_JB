@@ -36,12 +36,15 @@ c_xyz = CurveXYZFourier(50, 1)
 c_xyz.set("xc(0)", R)
 c_xyz.set("xc(1)", 0.7)
 c_xyz.set("yc(0)", 0)
-c_xyz.set("yc(1)", 0)
+c_xyz.set("yc(1)", 0) 
 c_xyz.set("zs(1)", 0.7)
 
 ax.plot(c_xyz.gamma()[:, 0], c_xyz.gamma()[:, 1], c_xyz.gamma()[:, 2], color = "red")
+plt.show()
 
-print(surface.x)
-print(c_xyz.x)
+print(f"surface dofs: {surface.x}")
+print(f"curve dofs: {c_xyz.x}")
+
 
 plt.savefig("curve_surface.pdf", bbox_inches='tight')
+print("\n*******\nPDF SAVED\n*******")
