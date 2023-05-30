@@ -115,8 +115,7 @@ def curve(R, a, n):
 
 
 #INPUTS
-print(
-    "Okay então, o limite dos eixos é int, os Raios (R, a) são floats.\nOs coeficientes de t nas parametrizações têm de ser inteiros para a curva ser fechada!\n")
+print("The axis limits must be ints.\nThe radius (R, a) are floats.\nOs coeficientes de t nas parametrizações têm de ser inteiros para a curva ser fechada!\n")
 lim = int(input("Limite dos eixos (abs): "))
 R = float(input("Raio R: "))
 a = float(input("Raio a: "))

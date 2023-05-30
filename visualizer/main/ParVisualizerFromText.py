@@ -99,7 +99,4 @@ a = float(input("Raio a: "))
 x, y, z, toroid = torus(R, a, lim)
 xc, yc, zc, curv = curve(R, a, dataframe_theta, dataframe_phi)
 
-# a1 = np.asarray(dataframe.iloc[0:, 0])
-# print(a1)
-
 plt.show()
