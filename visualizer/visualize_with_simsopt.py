@@ -40,7 +40,6 @@ c_xyz.set("yc(1)", 0)
 c_xyz.set("zs(1)", 0.7)
 
 ax.plot(c_xyz.gamma()[:, 0], c_xyz.gamma()[:, 1], c_xyz.gamma()[:, 2], color = "red")
-plt.show()
 
 print(f"surface dofs: {surface.x}")
 print(f"curve dofs: {c_xyz.x}")
