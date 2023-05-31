@@ -41,7 +41,7 @@ def optimization_settings(LENGTH_THRESHOLD_, LENGTH_WEIGHT_, CC_THRESHOLD_, CC_W
 (LENGTH_THRESHOLD, LENGTH_WEIGHT, CC_THRESHOLD,
  CC_WEIGHT, CURVATURE_THRESHOLD, CURVATURE_WEIGHT,
  MSC_THRESHOLD, MSC_WEIGHT, ARCLENGTH_WEIGHT, 
- LENGTH_CON_WEIGHT, MAXITER) = optimization_settings(20, 1e-8, 0.1, 100, 60, 1e-5, 20, 1e-9, 3e-8, 0.1, 50)
+ LENGTH_CON_WEIGHT, MAXITER) = optimization_settings(20, 1e-8, 0.1, 100, 60, 1e-5, 60, 1e-9, 3e-8, 0.1, 50)
 
 OUT_DIR = "./evn2/"
 os.makedirs(OUT_DIR, exist_ok=True)
@@ -58,6 +58,15 @@ J_values4 = []
 J_values5 = []
 
 wout = '/home/joaobiu/simsopt_curvecws/examples/3_Advanced/input.axiTorus_nfp3_QA_final'
+
+f = open(OUT_DIR + "info_file.txt", "w")
+infostr1 = f"LENGTH_THRESHOLD: {LENGTH_THRESHOLD}\nLENGTH_WEIGHT: {LENGTH_WEIGHT}\nCC_THRESHOLD: {CC_THRESHOLD}\nCC_WEIGHT: {CC_WEIGHT}"
+infostr2 = f"\nCURVATURE_THRESHOLD: {CURVATURE_THRESHOLD}\nCURVATURE_WEIGHT: {CURVATURE_WEIGHT}\nMSC_THRESHOLD: {MSC_THRESHOLD}\nMSC_WEIGHT: {MSC_WEIGHT}"
+infostr3 = f"\nARCLENGTH_WEIGHT: {ARCLENGTH_WEIGHT}\nLENGTH_CON_WEIGHT: {LENGTH_CON_WEIGHT}"
+infostr4 = f"\nMAXITER: {MAXITER}\nncoils: {ncoils}\norder: {order}\nquadpoints: {quadpoints}\nntheta: {ntheta}\nnphi: {nphi}\n"
+infostr = infostr1 + infostr2 + infostr3 + infostr4
+f.write(infostr)
+f.close()
 
 # CREATE FLUX SURFACE
 s = SurfaceRZFourier.from_vmec_input(wout, range="half period", ntheta=ntheta, nphi=nphi)

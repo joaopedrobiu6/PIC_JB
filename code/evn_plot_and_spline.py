@@ -13,7 +13,7 @@ def Read_Two_Column_File(file_name):
 
     return x, y
 
-x_, y_ = Read_Two_Column_File('/home/joaobiu/pic/code/evn/data1.txt')
+x_, y_ = Read_Two_Column_File('/home/joaobiu/pic/code/evn_fix/data1.txt')
 x = np.array(x_)
 y = np.array(y_)
 print(x.shape)

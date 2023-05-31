@@ -28,7 +28,7 @@ CURVATURE_THRESHOLD = 60
 CURVATURE_WEIGHT = 1e-5
 
 # Threshold and weight for the mean squared curvature penalty in the objective function:
-MSC_THRESHOLD = 60
+MSC_THRESHOLD = 20
 #MSC_WEIGHT = 0.01
 MSC_WEIGHT = 1e-9
 
@@ -44,7 +44,7 @@ order = 10 # order of dofs of cws curves
 quadpoints = 300 #13 * order
 ntheta = 50
 nphi = 42
-ext_via_normal_factor = 0.2565045045045045
+ext_via_normal_factor = 0.24881881881881884
 
 # CREATE FLUX SURFACE
 s = SurfaceRZFourier.from_vmec_input(wout, range="half period", ntheta=ntheta, nphi=nphi)

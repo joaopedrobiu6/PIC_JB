@@ -9,7 +9,7 @@ from simsopt.mhd import Vmec
 from mpi4py import MPI
 from simsopt.util import MpiPartition
 
-#mpi = MpiPartition(8)
+mpi = MpiPartition(8)
 comm = MPI.COMM_WORLD
 
 def pprint(*args, **kwargs): print(*args, **kwargs) if comm.rank == 0 else 1
@@ -26,11 +26,11 @@ tmax=2500
 tol=1e-14
 
 filename_bs_final = 'biot_savart_opt.json'
-coils_directory = 'bomresultado2'
+coils_directory = 'output_cws'
 
-input_file = '/home/joaobiu/pic/code/wout_axiTorus_nfp3_QA_final_000_000000.nc'
+input_file = '/home/joaobiu/simsopt_curvecws/examples/3_Advanced/input.axiTorus_nfp3_QA_final'
 
-vmec = Vmec(input_file, ntheta=ntheta, nphi=nphi)#, mpi=mpi)
+vmec = Vmec(input_file, ntheta=ntheta, nphi=nphi, mpi=mpi)
 vmec.run()
 nfp = vmec.wout.nfp
 
