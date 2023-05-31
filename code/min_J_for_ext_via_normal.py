@@ -39,7 +39,7 @@ def optimization_settings(LENGTH_THRESHOLD_, LENGTH_WEIGHT_, CC_THRESHOLD_, CC_W
  MSC_THRESHOLD, MSC_WEIGHT, ARCLENGTH_WEIGHT, 
  LENGTH_CON_WEIGHT, MAXITER) = optimization_settings(20, 1e-8, 0.1, 100, 60, 1e-5, 20, 1e-9, 3e-8, 0.1, 50)
 
-OUT_DIR = "./evn/"
+OUT_DIR = "./evn3/"
 os.makedirs(OUT_DIR, exist_ok=True)
 
 ncoils = 4
@@ -87,10 +87,12 @@ def cws_and_curves(factor):
     return cws, cws_full, base_curves, base_currents
 
 #factor_values = np.arange(0.2560, 0.2570, 0.00001) #np.arange(0.250, 0.260, 0.0001)
-factor_values = np.arange(0.01, 0.4, 0.05)
+factor_values = np.arange(0.1, 0.4, 0.05)
 J_values = []
 
 for i in factor_values:
+    OUT_DIR2 = f"./evn3/{i:.5f}/"
+    os.makedirs(OUT_DIR2, exist_ok=True)
     cws, cws_full, base_curves, base_currents = cws_and_curves(i)
 
     coils = coils_via_symmetries(base_curves, base_currents, s.nfp, True)
@@ -132,6 +134,15 @@ for i in factor_values:
         tol=1e-15,
     )
 
+    bs.set_points(s_full.gamma().reshape((-1, 3)))
+    curves_to_vtk(curves, OUT_DIR2 + "curves_opt")
+    curves_to_vtk(base_curves, OUT_DIR2 + "base_curves_opt")
+    pointData = {"B_N": np.sum(bs.B().reshape((int(nphi*2*s_full.nfp), ntheta, 3)) * s_full.unitnormal(), axis=2)[:, :, None]}
+    s_full.to_vtk(OUT_DIR2 + "surf_opt", extra_data=pointData)
+    cws_full.to_vtk(OUT_DIR2 + "cws_opt")
+    bs.set_points(s.gamma().reshape((-1, 3)))
+    bs.save(OUT_DIR2 + "biot_savart_opt.json")
+
     print(f"{i:.6f}:    {JF.J():.3e}")
     J_values.append(JF.J())
 
@@ -140,9 +151,9 @@ plt.plot(factor_values, J_values, "-o", color = "red")
 plt.title("Extend via normal factor variation")
 plt.xlabel("extend_via_normal factor")
 plt.ylabel("JF.J()")
-plt.savefig("opt_evn_factor.png")
+plt.savefig(f"{OUT_DIR} + opt_evn_factor.png")
 plt.show()
 
 data = np.column_stack([factor_values, J_values])
-datafile_path = OUT_DIR + "data_65.txt"
+datafile_path = OUT_DIR + "data.txt"
 np.savetxt(datafile_path , data, fmt=['%f','%e'])
