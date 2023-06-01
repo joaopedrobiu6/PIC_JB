@@ -87,7 +87,10 @@ def cws_and_curves(factor):
     return cws, cws_full, base_curves, base_currents
 
 #factor_values = np.arange(0.2560, 0.2570, 0.00001) #np.arange(0.250, 0.260, 0.0001)
-factor_values = np.arange(0.1, 0.4, 0.05)
+#factor_values = np.arange(0.247, 0.261, 0.0005)
+factor_values = np.arange(0.245, 0.26, 0.0001)
+
+
 J_values = []
 
 for i in factor_values:
@@ -146,12 +149,17 @@ for i in factor_values:
     print(f"{i:.6f}:    {JF.J():.3e}")
     J_values.append(JF.J())
 
-print(f"{min(J_values)}")
-plt.plot(factor_values, J_values, "-o", color = "red")
+min_x = factor_values[J_values.index(min(J_values))]
+min_y = min(J_values)
+
+print(f"{min_x} {min_y}")
+plt.plot(factor_values, J_values, "-o", color = "red", label = f"minimum value of J: ({min_x:.5}, {min_y:.3e})")
+plt.legend()
 plt.title("Extend via normal factor variation")
 plt.xlabel("extend_via_normal factor")
 plt.ylabel("JF.J()")
-plt.savefig(f"{OUT_DIR} + opt_evn_factor.png")
+
+plt.savefig(f"{OUT_DIR}opt_evn_factor.png")
 plt.show()
 
 data = np.column_stack([factor_values, J_values])

@@ -22,13 +22,13 @@ nphi = 42
 nzeta = 4
 nfieldlines = 8
 
-tmax=2500
-tol=1e-14
+tmax=2000
+tol=1e-15
 
 filename_bs_final = 'biot_savart_opt.json'
 coils_directory = 'output_cws'
 
-input_file = '/home/joaobiu/simsopt_curvecws/examples/3_Advanced/input.axiTorus_nfp3_QA_final'
+input_file = '//home/joaobiu/pic/code/wout_axiTorus_nfp3_QA_final_000_000000.nc'
 
 vmec = Vmec(input_file, ntheta=ntheta, nphi=nphi, mpi=mpi)
 vmec.run()
@@ -108,7 +108,7 @@ if comm.rank == 0:
         for j in range(nfieldlines):
             if j== 0 and i == 0:
                 legend1 = 'Poincare'
-                legend3 = 'Single-Stage'
+                legend3 = 'CurveCWSFourier'
             else:
                 legend1 = legend3 = '_nolegend_'
             axs[row, col].plot(R[i,j,:], Z[i,j,:], '-', linewidth=1.2, c='k', label = legend3)
@@ -117,4 +117,4 @@ if comm.rank == 0:
 
     leg = fig.legend(loc='upper center', bbox_to_anchor=(0.5, 1.05), ncol=4, fontsize=12)
     plt.tight_layout()
-    plt.savefig(os.path.join(OUT_DIR, f'poincare_QFM_fieldline_all.pdf'), bbox_inches = 'tight', pad_inches = 0)
+    plt.savefig(os.path.join(OUT_DIR, f'poincare_cws.pdf'), bbox_inches = 'tight', pad_inches = 0)

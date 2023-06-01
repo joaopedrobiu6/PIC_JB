@@ -43,7 +43,7 @@ def optimization_settings(LENGTH_THRESHOLD_, LENGTH_WEIGHT_, CC_THRESHOLD_, CC_W
  MSC_THRESHOLD, MSC_WEIGHT, ARCLENGTH_WEIGHT, 
  LENGTH_CON_WEIGHT, MAXITER) = optimization_settings(20, 1e-8, 0.1, 100, 60, 1e-5, 60, 1e-9, 3e-8, 0.1, 50)
 
-OUT_DIR = "./evn2/"
+OUT_DIR = "./evn21/"
 os.makedirs(OUT_DIR, exist_ok=True)
 
 ncoils = 4
@@ -56,6 +56,9 @@ J_values2 = []
 J_values3 = []
 J_values4 = []
 J_values5 = []
+J_values6 = []
+J_values7 = []
+J_values8 = []
 
 wout = '/home/joaobiu/simsopt_curvecws/examples/3_Advanced/input.axiTorus_nfp3_QA_final'
 
@@ -174,11 +177,13 @@ def optimization(min, max, step, J_values, thread):
 
 
 
-x1 = threading.Thread(target=optimization, args=(0.165,0.210, 0.005, J_values1, 1))
-x2 = threading.Thread(target=optimization, args=(0.21,0.26, 0.005, J_values2, 2))
-x3 = threading.Thread(target=optimization, args=(0.26,0.31, 0.005, J_values3, 3))
-x4 = threading.Thread(target=optimization, args=(0.31,0.36, 0.005, J_values4, 4))
-x5 = threading.Thread(target=optimization, args=(0.36,0.41, 0.005, J_values5, 5))
+x1 = threading.Thread(target=optimization, args=(0.247,0.251, 0.0005, J_values1, 1))
+x2 = threading.Thread(target=optimization, args=(0.251,0.253, 0.0005, J_values2, 2))
+x3 = threading.Thread(target=optimization, args=(0.253,0.255, 0.0005, J_values3, 3))
+x4 = threading.Thread(target=optimization, args=(0.255,0.257, 0.0005, J_values4, 4))
+x5 = threading.Thread(target=optimization, args=(0.257,0.259, 0.0005, J_values5, 5))
+x6 = threading.Thread(target=optimization, args=(0.259,0.261, 0.0005, J_values6, 6))
+
 
 
 x1.start()
@@ -186,6 +191,8 @@ x2.start()
 x3.start()
 x4.start()
 x5.start()
+x6.start()
+
 
 # x.join()
 
