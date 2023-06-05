@@ -22,7 +22,7 @@ surface.set_dofs([R, s.get_zs(1, 0)*minor_radius_factor_cws, s.get_zs(1, 0)*mino
 cws_full.set_dofs([R, s.get_zs(1, 0)*minor_radius_factor_cws, s.get_zs(1, 0)*minor_radius_factor_cws])
 fig = plt.figure()
 ax = plt.axes(projection='3d')
-lim=1.5
+lim=1.2
 ax.set_xlim3d(-lim, lim)
 ax.set_ylim3d(-lim, lim)
 ax.set_zlim3d(-lim, lim)
@@ -39,11 +39,12 @@ c_xyz.set("yc(0)", 0)
 c_xyz.set("yc(1)", 0) 
 c_xyz.set("zs(1)", 0.7)
 
-ax.plot(c_xyz.gamma()[:, 0], c_xyz.gamma()[:, 1], c_xyz.gamma()[:, 2], color = "red")
+ax.plot(c_xyz.gamma()[:, 0], c_xyz.gamma()[:, 1], c_xyz.gamma()[:, 2], color = "red", lw=3)
+plt.axis('off')
 
 print(f"surface dofs: {surface.x}")
 print(f"curve dofs: {c_xyz.x}")
 
-
-plt.savefig("curve_surface.pdf", bbox_inches='tight')
+plt.savefig("curve_surface.pdf", bbox_inches='tight', pad_inches=0)
+plt.show()
 print("\n*******\nPDF SAVED\n*******")

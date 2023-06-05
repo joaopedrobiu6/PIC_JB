@@ -11,7 +11,7 @@ from simsopt.geo import (
     MeanSquaredCurvature, LpCurveCurvature, CurveCWSFourier, ArclengthVariation
 )
 
-OUT_DIR = "./output_cws/"
+OUT_DIR = "./output_cws_final/"
 os.makedirs(OUT_DIR, exist_ok=True)
 
 # Threshold and weight for the maximum length of each individual coil:
@@ -44,7 +44,7 @@ order = 10 # order of dofs of cws curves
 quadpoints = 300 #13 * order
 ntheta = 50
 nphi = 42
-ext_via_normal_factor = 0.25649999999999873
+ext_via_normal_factor = 0.250700
 #0.25216216216216214
 
 
@@ -132,7 +132,7 @@ res = minimize(
     fun,
     dofs,
     jac=True,   
-    method="L-BFGS-B",
+    method='L-BFGS-B',
     options={"maxiter": MAXITER, "maxcor": 300},
     tol=1e-15,
 )

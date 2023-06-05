@@ -39,7 +39,7 @@ def optimization_settings(LENGTH_THRESHOLD_, LENGTH_WEIGHT_, CC_THRESHOLD_, CC_W
  MSC_THRESHOLD, MSC_WEIGHT, ARCLENGTH_WEIGHT, 
  LENGTH_CON_WEIGHT, MAXITER) = optimization_settings(20, 1e-8, 0.1, 100, 60, 1e-5, 20, 1e-9, 3e-8, 0.1, 50)
 
-OUT_DIR = "./evn_final_1/"
+OUT_DIR = "./evn_final_2/"
 os.makedirs(OUT_DIR, exist_ok=True)
 
 ncoils = 4
@@ -88,13 +88,15 @@ def cws_and_curves(factor):
 
 #factor_values = np.arange(0.2560, 0.2570, 0.00001) #np.arange(0.250, 0.260, 0.0001)
 #factor_values = np.arange(0.247, 0.261, 0.0005)
-factor_values = np.arange(0.1, 0.4, 0.002)
+#factor_values = np.arange(0.1, 0.4, 0.002)
+
+factor_values = np.arange(0.24, 0.26, 0.0001)
 
 
 J_values = []
 
 for i in factor_values:
-    OUT_DIR2 = f"./evn_final_1/{i:.5f}/"
+    OUT_DIR2 = f"./evn_final_2/{i:.5f}/"
     os.makedirs(OUT_DIR2, exist_ok=True)
     cws, cws_full, base_curves, base_currents = cws_and_curves(i)
 

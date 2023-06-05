@@ -1,8 +1,9 @@
 import numpy as np
 from scipy.interpolate import UnivariateSpline
 import matplotlib.pyplot as plt
+import operator
 
-outdir = '/home/joaobiu/pic/code/evn_final_1/'
+outdir = '/home/joaobiu/pic/code/evn_final_2/'
 
 def Read_Two_Column_File(file_name):
     with open(file_name, 'r') as data:
@@ -32,6 +33,26 @@ def minimum(x, y):
 
     return min_x, min_y
 
+def sort(x, y):
+    x_sort = x
+
+    y_sort = y
+
+    L = sorted(zip(x,y), key=operator.itemgetter(1))
+
+    new_x, new_y = zip(*L)
+    data = np.column_stack([new_x, new_y])
+    datafile_path = outdir + "sorted_values.txt"
+    np.savetxt(datafile_path , data, fmt=['%f','%e'])
+
+
 
 x_min, y_min = minimum(x, y)
+
+data = np.column_stack([x_min, y_min])
+datafile_path = outdir + "minimum.txt"
+np.savetxt(datafile_path , data, fmt=['%f','%e'])
+
+sort(x, y)
+
 print(f"{x_min} {y_min}")

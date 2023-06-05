@@ -22,7 +22,7 @@ LENGTH_WEIGHT = 1e-8
 # Threshold and weight for the coil-to-coil distance penalty in the objective function:
 CC_THRESHOLD = 0.1
 #CC_WEIGHT = 1000
-CC_WEIGHT = 1000
+CC_WEIGHT = 100
 
 # Threshold and weight for the curvature penalty in the objective function:
 CURVATURE_THRESHOLD = 60
@@ -30,9 +30,9 @@ CURVATURE_THRESHOLD = 60
 CURVATURE_WEIGHT = 1e-5
 
 # Threshold and weight for the mean squared curvature penalty in the objective function:
-MSC_THRESHOLD = 200
+MSC_THRESHOLD = 60
 #MSC_WEIGHT = 0.01
-MSC_WEIGHT = 1e-10
+MSC_WEIGHT = 1e-9
 
 ARCLENGTH_WEIGHT = 3e-8
 LENGTH_CON_WEIGHT = 0.1
@@ -55,7 +55,7 @@ cws = SurfaceRZFourier.from_nphi_ntheta(nphi, ntheta, "half period", s.nfp)
 cws_full = SurfaceRZFourier.from_nphi_ntheta(int(nphi*2*s.nfp), ntheta, "full torus", s.nfp)
 
 R = s.get_rc(0, 0)
-minor_radius_factor_cws = 1 + 0.2595/s.get_zs(1, 0)
+minor_radius_factor_cws = 1 + 0.2565/s.get_zs(1, 0)
 cws.set_dofs([R, s.get_zs(1, 0)*minor_radius_factor_cws, s.get_zs(1, 0)*minor_radius_factor_cws])
 cws_full.set_dofs([R, s.get_zs(1, 0)*minor_radius_factor_cws, s.get_zs(1, 0)*minor_radius_factor_cws])
 
