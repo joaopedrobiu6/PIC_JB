@@ -45,6 +45,6 @@ plt.axis('off')
 print(f"surface dofs: {surface.x}")
 print(f"curve dofs: {c_xyz.x}")
 
-plt.savefig("curve_surface.pdf", bbox_inches='tight', pad_inches=0)
+plt.savefig("curve_surface.png", format='png', bbox_inches='tight', pad_inches=0, transparent=True)
 plt.show()
 print("\n*******\nPDF SAVED\n*******")

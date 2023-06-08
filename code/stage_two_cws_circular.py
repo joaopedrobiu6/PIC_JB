@@ -146,3 +146,24 @@ s_full.to_vtk(OUT_DIR + "surf_opt", extra_data=pointData)
 cws_full.to_vtk(OUT_DIR + "cws_opt")
 bs.set_points(s.gamma().reshape((-1, 3)))
 bs.save(OUT_DIR + "biot_savart_opt.json")
+
+
+J = JF.J()
+jf = Jf.J()
+BdotN = np.mean(np.abs(np.sum(bs.B().reshape((nphi, ntheta, 3)) * s.unitnormal(), axis=2)))
+outstr = f"J={J:.3e}, Jf={jf:.3e}, ⟨B·n⟩={BdotN:.1e}"
+cl_string = ", ".join([f"{J.J():.1f}" for J in Jls])
+kap_string = ", ".join(f"{np.max(c.kappa()):.1f}" for c in base_curves)
+msc_string = ", ".join(f"{J.J():.1f}" for J in Jmscs)
+outstr += f", Len=sum([{cl_string}])={sum(J.J() for J in Jls):.1f}, ϰ=[{kap_string}], ∫ϰ²/L=[{msc_string}]"
+outstr += f", C-C-Sep={Jccdist.shortest_distance():.2f}"
+
+
+f = open(OUT_DIR + "info_file.txt", "w")
+infostr1 = f"LENGTH_THRESHOLD: {LENGTH_THRESHOLD}\nLENGTH_WEIGHT: {LENGTH_WEIGHT}\nCC_THRESHOLD: {CC_THRESHOLD}\nCC_WEIGHT: {CC_WEIGHT}"
+infostr2 = f"\nCURVATURE_THRESHOLD: {CURVATURE_THRESHOLD}\nCURVATURE_WEIGHT: {CURVATURE_WEIGHT}\nMSC_THRESHOLD: {MSC_THRESHOLD}\nMSC_WEIGHT: {MSC_WEIGHT}"
+infostr3 = f"\nARCLENGTH_WEIGHT: {ARCLENGTH_WEIGHT}\nLENGTH_CON_WEIGHT: {LENGTH_CON_WEIGHT}"
+infostr4 = f"\nMAXITER: {MAXITER}\nncoils: {ncoils}\norder: {order}\nquadpoints: {quadpoints}\nntheta: {ntheta}\nnphi: {nphi}\n"
+infostr = infostr1 + infostr2 + infostr3 + infostr4 + outstr
+f.write(infostr)
+f.close()

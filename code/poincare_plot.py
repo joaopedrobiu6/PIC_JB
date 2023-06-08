@@ -28,7 +28,7 @@ tmax=2500
 tol=1e-15
 
 filename_bs_final = 'biot_savart_opt.json'
-coils_directory = 'output_cws_final_minimum2'
+coils_directory = 'output_cws_circular_final_minimum1'
 
 input_file = '//home/joaobiu/pic/code/wout_axiTorus_nfp3_QA_final_000_000000.nc'
 
@@ -119,4 +119,4 @@ if comm.rank == 0:
 
     leg = fig.legend(loc='upper center', bbox_to_anchor=(0.5, 1.05), ncol=4, fontsize=12)
     plt.tight_layout()
-    plt.savefig(os.path.join(OUT_DIR, f'poincare_cws_minimum2.pdf'), bbox_inches = 'tight', pad_inches = 0)
+    plt.savefig(os.path.join(OUT_DIR, f'poincare_cws_circular_minimum1.pdf'), bbox_inches = 'tight', pad_inches = 0)

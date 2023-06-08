@@ -3,7 +3,7 @@ from scipy.interpolate import UnivariateSpline
 import matplotlib.pyplot as plt
 import operator
 
-outdir = '/home/joaobiu/pic/code/evn_final_2/'
+outdir1 = '/home/joaobiu/pic/code/evn_final_circular1/'
 
 def Read_Two_Column_File(file_name):
     with open(file_name, 'r') as data:
@@ -16,20 +16,21 @@ def Read_Two_Column_File(file_name):
 
     return x, y
 
-x, y = Read_Two_Column_File(outdir + 'data.txt')
+x1, y1 = Read_Two_Column_File(outdir1 + 'data.txt')
 
 def minimum(x, y):
     #y_index = y.index(min(y))
     min_x = x[y.index(min(y))]
     min_y = min(y)
     
-    plt.scatter(x , y, color = "#2ec77d", marker = ".")
+    plt.subplots(figsize=(6, 5))
+    plt.scatter(x , y, color = "#2ec77d", marker=".")
     plt.scatter(min_x, min_y, label = f"minimum value of J: ({min_x:.5}, {min(y):.3e})")
     plt.legend()
     plt.title("Extend via normal factor variation")
     plt.xlabel("extend_via_normal factor")
     plt.ylabel("JF.J()")
-    plt.savefig(outdir + "opt_evn_factor.pdf", dpi = 300)
+    plt.savefig(outdir1 + "opt_evn_factor.pdf", dpi = 300, bbox_inches = 'tight')
 
     return min_x, min_y
 
@@ -42,17 +43,17 @@ def sort(x, y):
 
     new_x, new_y = zip(*L)
     data = np.column_stack([new_x, new_y])
-    datafile_path = outdir + "sorted_values.txt"
+    datafile_path = outdir1 + "sorted_values.txt"
     np.savetxt(datafile_path , data, fmt=['%f','%e'])
 
 
 
-x_min, y_min = minimum(x, y)
+x_min, y_min = minimum(x1, y1)
 
 data = np.column_stack([x_min, y_min])
-datafile_path = outdir + "minimum.txt"
+datafile_path = outdir1 + "minimum.txt"
 np.savetxt(datafile_path , data, fmt=['%f','%e'])
 
-sort(x, y)
+sort(x1, y1)
 
 print(f"{x_min} {y_min}")

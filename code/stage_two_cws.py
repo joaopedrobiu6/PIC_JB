@@ -44,7 +44,7 @@ order = 10 # order of dofs of cws curves
 quadpoints = 300 #13 * order
 ntheta = 50
 nphi = 42
-ext_via_normal_factor = 0.250700
+ext_via_normal_factor = 0.2565
 #0.25216216216216214
 
 
