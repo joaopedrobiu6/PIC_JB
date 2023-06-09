@@ -1,9 +1,0 @@
-result1:
-tem o varrimento do fator de escalamento de Extend_Via_Normal de 0.247 a 0.261
-
-result/output_cws:
-stage_two_cws feito com o fator minimizador de J.J() que veio do varrimento acima
-
-result/output_cws_spline:
-stage_two_cws feito com o valor minimo de J.J() que veio da interpolação dos pontos que vieram do varrimento
-
