@@ -101,7 +101,7 @@ MAXITER = 50
 
 for n in factor:
     bs, base_curves, curves, cws_full= optimize_extend_via_normal_factor(n)
-    Jf = SquaredFlux(s, bs, local=True)
+    Jf = SquaredFlux(s, bs, definition="local")
     Jls = [CurveLength(c) for c in base_curves]
     Jccdist = CurveCurveDistance(curves, CC_THRESHOLD, num_basecurves=len(curves))
     Jcs = [LpCurveCurvature(c, 2, CURVATURE_THRESHOLD) for i, c in enumerate(base_curves)]

@@ -3,7 +3,7 @@ from scipy.interpolate import UnivariateSpline
 import matplotlib.pyplot as plt
 import operator
 
-outdir1 = '/home/joaobiu/pic/code/evn_final_circular1/'
+outdir1 = '/home/joaobiu/pic/code/evn_final_1/'
 
 def Read_Two_Column_File(file_name):
     with open(file_name, 'r') as data:
@@ -30,7 +30,7 @@ def minimum(x, y):
     plt.title("Extend via normal factor variation")
     plt.xlabel("extend_via_normal factor")
     plt.ylabel("JF.J()")
-    plt.savefig(outdir1 + "opt_evn_factor.pdf", dpi = 300, bbox_inches = 'tight')
+    plt.savefig(outdir1 + "opt_evn_factor.png", dpi = 300, bbox_inches = 'tight')
 
     return min_x, min_y
 

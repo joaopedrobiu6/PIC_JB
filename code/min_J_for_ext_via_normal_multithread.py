@@ -126,7 +126,7 @@ def optimization(min, max, step, J_values, thread):
 
         bs.set_points(s.gamma().reshape((-1, 3)))
 
-        Jf = SquaredFlux(s, bs, local=True)
+        Jf = SquaredFlux(s, bs, definition="local")
         Jls = [CurveLength(c) for c in base_curves]
         Jccdist = CurveCurveDistance(curves, CC_THRESHOLD, num_basecurves=len(curves))
         Jcs = [LpCurveCurvature(c, 2, CURVATURE_THRESHOLD) for i, c in enumerate(base_curves)]
