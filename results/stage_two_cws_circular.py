@@ -10,42 +10,30 @@ from simsopt.geo import (
     CurveLength, CurveCurveDistance,
     MeanSquaredCurvature, LpCurveCurvature, CurveCWSFourier, ArclengthVariation
 )
-
-OUT_DIR = "./output_cws_test/"
+    
+OUT_DIR = "./output_cws_circular/"
 os.makedirs(OUT_DIR, exist_ok=True)
 
 # Threshold and weight for the maximum length of each individual coil:
-#LENGTH_THRESHOLD = 20
-#LENGTH_WEIGHT = 1e-8
-
-LENGTH_THRESHOLD = 20  
+LENGTH_THRESHOLD = 20
+#LENGTH_WEIGHT = 0.1
 LENGTH_WEIGHT = 1e-8
 
-
 # Threshold and weight for the coil-to-coil distance penalty in the objective function:
-#CC_THRESHOLD = 0.1
-#CC_WEIGHT = 100
-
 CC_THRESHOLD = 0.1
+#CC_WEIGHT = 1000
 CC_WEIGHT = 100
 
-
 # Threshold and weight for the curvature penalty in the objective function:
-#CURVATURE_THRESHOLD = 60
-#CURVATURE_WEIGHT = 1e-5
-
 CURVATURE_THRESHOLD = 60
+#CURVATURE_WEIGHT = 0.1
 CURVATURE_WEIGHT = 1e-5
 
-
 # Threshold and weight for the mean squared curvature penalty in the objective function:
-#MSC_THRESHOLD = 60
-#MSC_WEIGHT = 1e-9
-#ARCLENGTH_WEIGHT = 3e-8
-#LENGTH_CON_WEIGHT = 0.1
-
 MSC_THRESHOLD = 60
+#MSC_WEIGHT = 0.01
 MSC_WEIGHT = 1e-9
+
 ARCLENGTH_WEIGHT = 3e-8
 LENGTH_CON_WEIGHT = 0.1
 
@@ -58,21 +46,20 @@ order = 10 # order of dofs of cws curves
 quadpoints = 300 #13 * order
 ntheta = 50
 nphi = 42
-ext_via_normal_factor = 0.2565
-#0.25216216216216214
 
-
-# CREATE FLUX SURFACE
+# CREATE FLUX SURFACE (BOUNDARY)
 s = SurfaceRZFourier.from_vmec_input(wout, range="half period", ntheta=ntheta, nphi=nphi)
 s_full = SurfaceRZFourier.from_vmec_input(wout, range="full torus", ntheta=ntheta, nphi=int(nphi*2*s.nfp))
-# CREATE COIL WINDING SURFACE SURFACE
-cws = SurfaceRZFourier.from_vmec_input(wout, range="half period", ntheta=ntheta, nphi=nphi)
-cws_full = SurfaceRZFourier.from_vmec_input(wout, range="full torus", ntheta=ntheta, nphi=int(nphi*2*s.nfp))
+# CREATE COIL WINDING SURFACE
+cws = SurfaceRZFourier.from_nphi_ntheta(nphi, ntheta, "half period", s.nfp)
+cws_full = SurfaceRZFourier.from_nphi_ntheta(int(nphi*2*s.nfp), ntheta, "full torus", s.nfp)
 
-cws.extend_via_normal(ext_via_normal_factor)
-cws_full.extend_via_normal(ext_via_normal_factor)
+R = s.get_rc(0, 0)
+minor_radius_factor_cws = 1 + 0.2565/s.get_zs(1, 0)
+cws.set_dofs([R, s.get_zs(1, 0)*minor_radius_factor_cws, s.get_zs(1, 0)*minor_radius_factor_cws])
+cws_full.set_dofs([R, s.get_zs(1, 0)*minor_radius_factor_cws, s.get_zs(1, 0)*minor_radius_factor_cws])
 
-# CREATE CURVES + COILS     
+# CREATE CURVES + COILS
 base_curves = []
 for i in range(ncoils):
     curve_cws = CurveCWSFourier(
@@ -145,8 +132,8 @@ dofs = np.copy(JF.x)
 res = minimize(
     fun,
     dofs,
-    jac=True,   
-    method='L-BFGS-B',
+    jac=True,
+    method="L-BFGS-B",
     options={"maxiter": MAXITER, "maxcor": 300},
     tol=1e-15,
 )
@@ -160,6 +147,7 @@ cws_full.to_vtk(OUT_DIR + "cws_opt")
 bs.set_points(s.gamma().reshape((-1, 3)))
 bs.save(OUT_DIR + "biot_savart_opt.json")
 
+
 J = JF.J()
 jf = Jf.J()
 BdotN = np.mean(np.abs(np.sum(bs.B().reshape((nphi, ntheta, 3)) * s.unitnormal(), axis=2)))
@@ -170,11 +158,12 @@ msc_string = ", ".join(f"{J.J():.1f}" for J in Jmscs)
 outstr += f", Len=sum([{cl_string}])={sum(J.J() for J in Jls):.1f}, ϰ=[{kap_string}], ∫ϰ²/L=[{msc_string}]"
 outstr += f", C-C-Sep={Jccdist.shortest_distance():.2f}"
 
+
 f = open(OUT_DIR + "info_file.txt", "w")
 infostr1 = f"LENGTH_THRESHOLD: {LENGTH_THRESHOLD}\nLENGTH_WEIGHT: {LENGTH_WEIGHT}\nCC_THRESHOLD: {CC_THRESHOLD}\nCC_WEIGHT: {CC_WEIGHT}"
 infostr2 = f"\nCURVATURE_THRESHOLD: {CURVATURE_THRESHOLD}\nCURVATURE_WEIGHT: {CURVATURE_WEIGHT}\nMSC_THRESHOLD: {MSC_THRESHOLD}\nMSC_WEIGHT: {MSC_WEIGHT}"
 infostr3 = f"\nARCLENGTH_WEIGHT: {ARCLENGTH_WEIGHT}\nLENGTH_CON_WEIGHT: {LENGTH_CON_WEIGHT}"
-infostr4 = f"\nMAXITER: {MAXITER}\nncoils: {ncoils}\norder: {order}\nquadpoints: {quadpoints}\nntheta: {ntheta}\nnphi: {nphi}\next_v_n: {ext_via_normal_factor}\n"
+infostr4 = f"\nMAXITER: {MAXITER}\nncoils: {ncoils}\norder: {order}\nquadpoints: {quadpoints}\nntheta: {ntheta}\nnphi: {nphi}\n"
 infostr = infostr1 + infostr2 + infostr3 + infostr4 + outstr
 f.write(infostr)
 f.close()
