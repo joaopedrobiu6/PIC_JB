@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-filename = "/home/joaobiu/pic/vmec_equilibria/NCSX/li383_1.4m/wout_li383_1.4m.nc"
+filename = "../vmec_equilibria/NCSX/li383_1.4m/wout_li383_1.4m.nc"
 
 def image_maker(filename, name1, name2):
     s = SurfaceRZFourier.from_wout(filename, range="full torus", ntheta=64, nphi=64)  # range = 'full torus', 'field period', 'half period'
@@ -67,4 +67,4 @@ def image_maker(filename, name1, name2):
     plt.savefig(name2, dpi=400, bbox_inches = 'tight')
     plt.show()
 
-image_maker(filename, "plot2d_1.png", "plot3d_1.png")
+image_maker(filename, "pic_images/plot3d_1.png", "pic_images/plot2d_1.png")

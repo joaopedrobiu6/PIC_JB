@@ -3,7 +3,9 @@ from scipy.interpolate import UnivariateSpline
 import matplotlib.pyplot as plt
 import operator
 
-outdir1 = '/home/joaobiu/pic/code/evn_final_1/'
+#outdir1 = '/home/joaobiu/pic/results/evn_final_1/'
+
+outdir1 = 'evn_final_1/'
 
 def Read_Two_Column_File(file_name):
     with open(file_name, 'r') as data:
