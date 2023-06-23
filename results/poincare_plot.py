@@ -20,17 +20,17 @@ os.makedirs(OUT_DIR, exist_ok=True) if comm.rank == 0 else 1
 ntheta = 50
 nphi = 42
 nzeta = 4
-nfieldlines = 8
+nfieldlines = 12
 #nfieldlines = 3
 
-tmax=2500
+tmax=3000
 #tmax=200
 tol=1e-15
 
 filename_bs_final = 'biot_savart_opt.json'
-coils_directory = 'output_cws_final'
+coils_directory = 'output_cws_final_minimum1'
 
-input_file = '//home/joaobiu/pic/code/wout_axiTorus_nfp3_QA_final_000_000000.nc'
+input_file = 'wout_axiTorus_nfp3_QA_final_000_000000.nc'
 
 vmec = Vmec(input_file, ntheta=ntheta, nphi=nphi, mpi=mpi)
 vmec.run()

@@ -20,10 +20,10 @@ os.makedirs(OUT_DIR, exist_ok=True) if comm.rank == 0 else 1
 ntheta = 50
 nphi = 42
 nzeta = 4
-nfieldlines = 8
+nfieldlines = 12
 #nfieldlines = 3
 
-tmax=2500
+tmax=3000
 #tmax=200
 tol=1e-15
 
