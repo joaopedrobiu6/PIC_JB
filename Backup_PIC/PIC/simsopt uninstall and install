@@ -1,3 +1,6 @@
 sudo -H pip uninstall simsopt
 sudo rm -rf build/
 sudo -H python3 setup.py install
+
+No WSL - remover o limite de RAM
+Conda env - usar o root user e não um environment
