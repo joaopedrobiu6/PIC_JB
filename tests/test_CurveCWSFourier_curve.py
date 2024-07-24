@@ -1,3 +1,7 @@
+"""
+Test if CurveCWSFourier object is being created.
+"""
+
 from simsopt.geo import CurveCWSFourier, SurfaceRZFourier
 import matplotlib.pyplot as plt
 

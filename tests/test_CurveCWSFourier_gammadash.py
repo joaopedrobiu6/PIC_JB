@@ -1,3 +1,7 @@
+"""
+Test if CurveCWSFourier derivatives - gammadash - are being computed.
+"""
+
 from simsopt.geo import CurveCWSFourier, SurfaceRZFourier
 import matplotlib.pyplot as plt
 import numpy as np

@@ -1,3 +1,8 @@
+"""
+Test if CurveCWSFourier gradients are being computed:
+dgamma_by_dcoeff, dgammadash_by_dcoeff, dgammadashdash_by_dcoeff.
+"""
+
 from simsopt.geo import CurveCWSFourier, SurfaceRZFourier
 from simsopt.objectives import SquaredFlux
 from simsopt.field import BiotSavart
